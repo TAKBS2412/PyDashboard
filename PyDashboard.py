@@ -16,7 +16,7 @@ class PyDashboard(ttk.Frame):
         self.createWidgets()
     def createWidgets(self):
         self.header = ttk.Label(self, text="PyDashboard").grid(row=0, column=0)
-        self.frame0 = Chooser().grid(row=1, column=0)
+        self.frame0 = Chooser(self).grid(row=1, column=0)
         
 dashboard = PyDashboard(Tk())
 dashboard.master.title("PyDashboard")
