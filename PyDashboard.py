@@ -1,22 +1,23 @@
-import tkinter as tk
+from tkinter import *
+from tkinter import ttk
 
-class Chooser(tk.Frame):
+class Chooser(Frame):
     def __init__(self, master=None):
-        tk.Frame.__init__(self, master)
+        Frame.__init__(self, master)
         self.createWidgets()
     def createWidgets(self):
-        self.header = tk.Label(self, text="Step 1:").grid(row=0, column=0)
-        self.header2 = tk.Label(self, text="sdf").grid(row=1, column=0)
+        self.header = ttk.Label(self.master, text="Step 1:").grid(row=2, column=0)
+        self.header2 = ttk.Label(self.master, text="sdf").grid(row=3, column=0)
         
-class PyDashboard(tk.Frame):
+class PyDashboard(ttk.Frame):
     def __init__(self, master=None):
-        tk.Frame.__init__(self, master)
+        ttk.Frame.__init__(self, master)
         self.grid()
         self.createWidgets()
     def createWidgets(self):
-        self.header = tk.Label(self, text="PyDashboard").grid(row=0, column=0)
+        self.header = ttk.Label(self, text="PyDashboard").grid(row=0, column=0)
         self.frame0 = Chooser().grid(row=1, column=0)
         
-dashboard = PyDashboard()
+dashboard = PyDashboard(Tk())
 dashboard.master.title("PyDashboard")
 dashboard.mainloop()
