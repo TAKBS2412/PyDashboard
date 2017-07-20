@@ -15,7 +15,7 @@ class Chooser(ttk.LabelFrame):
         self.dropdown["values"] = ("Test", "Test #2", "Test #3")
         self.dropdown.grid(row=2, column=self.column)
 
-        self.image = ImageTk.PhotoImage(Image.open("Steampunk RT_icon.png"))
+        self.image = ImageTk.PhotoImage(Image.open("imgs/Steampunk RT_icon.png"))
         self.imagelabel = ttk.Label(self, image=self.image)
         self.imagelabel.image = self.image
         self.imagelabel.grid(row=3, column=self.column)
