@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-
+from PIL import ImageTk, Image
 class Chooser(ttk.LabelFrame):
     def __init__(self, master=None, column=0, **kw):
         ttk.LabelFrame.__init__(self, master, **kw)
@@ -15,6 +15,10 @@ class Chooser(ttk.LabelFrame):
         self.dropdown["values"] = ("Test", "Test #2", "Test #3")
         self.dropdown.grid(row=2, column=self.column)
 
+        self.image = ImageTk.PhotoImage(Image.open("Steampunk RT_icon.png"))
+        self.imagelabel = ttk.Label(self, image=self.image)
+        self.imagelabel.image = self.image
+        self.imagelabel.grid(row=3, column=self.column)
         
 class PyDashboard(ttk.Frame):
     def __init__(self, master=None):
@@ -28,7 +32,7 @@ class PyDashboard(ttk.Frame):
         self.pane = ttk.PanedWindow(self, orient=HORIZONTAL)
         self.pane.grid(row=1, column=0, columnspan=2)
         
-        self.robotStatus = Chooser(self.pane, 0, text="Robot Status", width=500, height=500)
+        self.robotStatus = Chooser(self.pane, 0, text="Robot Status", width=1920, height=1080)
         self.robotStatus.grid(row=1, column=0, rowspan=2, columnspan=2)
         
         self.pane.add(self.robotStatus)
