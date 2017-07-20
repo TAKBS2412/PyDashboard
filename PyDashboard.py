@@ -2,12 +2,13 @@ from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk, Image
 class Chooser(ttk.LabelFrame):
-    def __init__(self, master=None, column=0, **kw):
+    def __init__(self, master=None, column=0, headertext="", **kw):
         ttk.LabelFrame.__init__(self, master, **kw)
         self.column = column
+        self.headertext = headertext
         self.createWidgets()
     def createWidgets(self):
-        self.header = ttk.Label(self, text="Step 1:")
+        self.header = ttk.Label(self, text=self.headertext)
         self.header.grid(row=1, column=self.column)
 
         self.dropdownvar = StringVar()
@@ -32,7 +33,7 @@ class PyDashboard(ttk.Frame):
         self.pane = ttk.PanedWindow(self, orient=HORIZONTAL)
         self.pane.grid(row=1, column=0, columnspan=2)
         
-        self.robotStatus = Chooser(self.pane, 0, text="Robot Status", width=1920, height=1080)
+        self.robotStatus = Chooser(self.pane, 0, "Step 1", text="Robot Status", width=1920, height=1080)
         self.robotStatus.grid(row=1, column=0, rowspan=2, columnspan=2)
         
         self.pane.add(self.robotStatus)
