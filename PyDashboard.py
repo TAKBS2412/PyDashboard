@@ -2,10 +2,11 @@ from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk, Image
 class Chooser(ttk.LabelFrame):
-    def __init__(self, master=None, column=0, headertext="", **kw):
+    def __init__(self, master=None, column=0, headertext="", comboboxvalues=(), **kw):
         ttk.LabelFrame.__init__(self, master, **kw)
         self.column = column
         self.headertext = headertext
+        self.comboboxvalues = comboboxvalues
         self.createWidgets()
     def createWidgets(self):
         self.header = ttk.Label(self, text=self.headertext)
@@ -13,7 +14,7 @@ class Chooser(ttk.LabelFrame):
 
         self.dropdownvar = StringVar()
         self.dropdown = ttk.Combobox(self, textvariable=self.dropdownvar)
-        self.dropdown["values"] = ("Test", "Test #2", "Test #3")
+        self.dropdown["values"] = self.comboboxvalues
         self.dropdown.grid(row=2, column=self.column)
 
         self.image = ImageTk.PhotoImage(Image.open("imgs/Steampunk RT_icon.png"))
@@ -33,7 +34,7 @@ class PyDashboard(ttk.Frame):
         self.pane = ttk.PanedWindow(self, orient=HORIZONTAL)
         self.pane.grid(row=1, column=0, columnspan=2)
         
-        self.robotStatus = Chooser(self.pane, 0, "Step 1", text="Robot Status", width=1920, height=1080)
+        self.robotStatus = Chooser(self.pane, 0, "Step 1", ("A", "B", "C"), text="Robot Status", width=1920, height=1080)
         self.robotStatus.grid(row=1, column=0, rowspan=2, columnspan=2)
         
         self.pane.add(self.robotStatus)
