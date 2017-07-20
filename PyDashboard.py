@@ -9,8 +9,12 @@ class Chooser(ttk.LabelFrame):
     def createWidgets(self):
         self.header = ttk.Label(self, text="Step 1:")
         self.header.grid(row=1, column=self.column)
-        self.header2 = ttk.Label(self, text="sdf")
-        self.header2.grid(row=2, column=self.column)
+
+        self.dropdownvar = StringVar()
+        self.dropdown = ttk.Combobox(self, textvariable=self.dropdownvar)
+        self.dropdown["values"] = ("Test", "Test #2", "Test #3")
+        self.dropdown.grid(row=2, column=self.column)
+
         
 class PyDashboard(ttk.Frame):
     def __init__(self, master=None):
