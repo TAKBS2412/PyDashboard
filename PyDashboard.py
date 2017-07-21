@@ -75,26 +75,30 @@ class PyDashboard(ttk.Frame):
 
         self.createWidgets() # Create the widgets that will be displayed to the user.
     def createWidgets(self):
-        self.header = ttk.Label(self, text="PyDashboard")
-        self.header.grid(row=0, column=0)
-        
-        self.pane = ttk.PanedWindow(self, orient=HORIZONTAL)
-        self.pane.grid(row=1, column=0)
 
-        # Add the Robot Status LabelFrame.
+        # Create the header Label
+        self.header = ttk.Label(self, text="PyDashboard") # Create the Label.
+        self.header.grid(row=0, column=0) # Add the Label to the PyDashboard.
+
+        # Create the PanedWindow, which will contain the Robot Status Label and the Choosers.
+        self.pane = ttk.PanedWindow(self, orient=HORIZONTAL) # Create the PanedWindow.
+        self.pane.grid(row=1, column=0) # Add the PanedWindow to the PyDashboard.
+
+        # Create the Robot Status LabelFrame.
         self.robotstatus = ttk.LabelFrame(self.pane, text="Robot Status") # Create the LabelFrame itself.
         self.robotstatus.label = ttk.Label(self.robotstatus, text="Robot Disconnected") # Create the Label that will be displayed within the LabelFrame.
         self.robotstatus.label.grid(row=1, column=0) # Add the Label to the LabelFrame.
-        self.robotstatus.grid(row=1, column=0) # Add the LabelFrame to the PyDashboard
+        self.robotstatus.grid(row=1, column=0) # Add the LabelFrame to the PyDashboard.
         self.pane.add(self.robotstatus) # Add the LabelFrame to the PanedWindow.
 
         # Create an array of all of the choosers and add them.
         self.choosers = []
 
+        # Create and add Choosers to the PyDashboard.
         for zipobj in zip(range(len(self.headertexttup)), self.headertexttup, self.comboboxvaluestup, self.imgpathtup, self.titletup):
-            self.choosers.append(Chooser(self.pane, zipobj[0]+1, zipobj[1], zipobj[2], zipobj[3], text=zipobj[4]))
-            self.choosers[zipobj[0]].grid(row=1, column=zipobj[0]+1)
-            self.pane.add(self.choosers[zipobj[0]])
+            self.choosers.append(Chooser(self.pane, zipobj[0]+1, zipobj[1], zipobj[2], zipobj[3], text=zipobj[4])) # Create a Chooser.
+            self.choosers[zipobj[0]].grid(row=1, column=zipobj[0]+1) # Add the Chooser to the PyDashboard.
+            self.pane.add(self.choosers[zipobj[0]]) # Add the Chooser to the PanedWindow.
         
 dashboard = PyDashboard(Tk(), ("Step 1", "Step 2", "Step 3", "Step 4"), (("A", "B", "C"), ("D", "E", "F"), ("G", "H", "I"), ("X", "Y", "Z")), ("imgs/Steampunk RT_icon.png", "imgs/falca_small.jpg", "imgs/sir_costalot_small.png", "imgs/tomo_small.jpg"), ("RT Status", "Falca Status", "Sir Costalot status", "Tomo status"))
 dashboard.master.title("PyDashboard")
