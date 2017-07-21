@@ -46,13 +46,22 @@ class Chooser(ttk.LabelFrame):
         self.imagelabel.grid(row=3, column=self.column) # Add to Frame.
 
 '''
-TODO ADD DOCUMENTATION RIGHT NOW
+This class represents the GUI for PyDashboard.
+It contains widgets that are laid out in the general fashion of this image: https://drive.google.com/file/d/0B_62XHEIagxyUi0yLV9uT1JFS3M/view?usp=sharing
+
 '''
 class PyDashboard(ttk.Frame):
+
+    '''
+    Creates a PyDashboard instance (see above description).
+    Parameters:
+        master - The master Frame.
+    '''
     def __init__(self, master=None):
-        ttk.Frame.__init__(self, master)
-        self.grid()
-        self.createWidgets()
+        ttk.Frame.__init__(self, master) # Call the superclass's constructor.
+
+        self.grid() # Use the grid layout manager.
+        self.createWidgets() # Create the widgets that will be displayed to the user.
     def createWidgets(self):
         self.header = ttk.Label(self, text="PyDashboard")
         self.header.grid(row=0, column=0)
