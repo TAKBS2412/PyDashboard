@@ -116,9 +116,7 @@ class PyDashboard(ttk.Frame):
             self.choosers[zipobj[0]].grid(row=1, column=zipobj[0]+1) # Add the Chooser to the PyDashboard.
             self.pane.add(self.choosers[zipobj[0]]) # Add the Chooser to the PanedWindow.
 
-        # Create the Send and 
-
 title = "PyDashboard"
-dashboard = PyDashboard(Tk(), title, ("Step 1", "Step 2", "Step 3", "Step 4"), (("A", "B", "C"), ("D", "E", "F"), ("G", "H", "I"), ("X", "Y", "Z")), ("imgs/Steampunk RT_icon.png", "imgs/falca_small.jpg", "imgs/sir_costalot_small.png", "imgs/tomo_small.jpg"), ("RT Status", "Falca Status", "Sir Costalot status", "Tomo status"))
+dashboard = PyDashboard(Tk(), title, ("Choose an autonomous mode:", "Falca will drive forward to the baseline using...", "Falca will turn towards the peg using...", "Falca will drive towards the peg using..."), (("Drive forward (if selected, ignore Steps 3 and 4)", "Left Peg", "Center Peg (if selected, ignore Step 3", "Right Peg"), ("Motion Profiling", "Time-Based", "Encoders"), ("Vision Processing", "Gyroscope"), ("Vision Processing", "Encoders")), ("imgs/Steampunk RT_icon.png", "imgs/falca_small.jpg", "imgs/sir_costalot_small.png", "imgs/tomo_small.jpg"), ("Step 1", "Step 2", "Step 3", "Step 4"))
 dashboard.master.title(title)
 dashboard.mainloop()
