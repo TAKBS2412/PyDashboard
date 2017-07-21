@@ -2,6 +2,14 @@ from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk, Image
 
+# Called when the connect button is pressed
+def connect():
+    print("Connect attempt made.")
+
+# Called when the send button is pressed.
+def send():
+    print("(hopefully) Sending values...")
+
 '''
 This class is a subclass of ttk.LabelFrame.
 It contains 3 widgets: A header (a Label), a Combobox, and an image.
@@ -82,6 +90,12 @@ class PyDashboard(ttk.Frame):
         self.header = ttk.Label(self, text=self.headerlabeltext) # Create the Label.
         self.header.grid(row=0, column=0) # Add the Label to the PyDashboard.
 
+        # Create the Connect and Send buttons.
+        self.connectbtn = ttk.Button(self, text="Connect", command=connect) # Create the Connect button.
+        self.connectbtn.grid(row=4, column=1) # Add the Connect button to the PyDashboard.
+        self.sendbtn = ttk.Button(self, text="Send", command=send) # Create the Send button.
+        self.sendbtn.grid(row=4, column=2) # Add the Send button to the PyDashboard.
+
         # Create the PanedWindow, which will contain the Robot Status Label and the Choosers.
         self.pane = ttk.PanedWindow(self, orient=HORIZONTAL) # Create the PanedWindow.
         self.pane.grid(row=1, column=0) # Add the PanedWindow to the PyDashboard.
@@ -101,6 +115,8 @@ class PyDashboard(ttk.Frame):
             self.choosers.append(Chooser(self.pane, zipobj[0]+1, zipobj[1], zipobj[2], zipobj[3], text=zipobj[4])) # Create a Chooser.
             self.choosers[zipobj[0]].grid(row=1, column=zipobj[0]+1) # Add the Chooser to the PyDashboard.
             self.pane.add(self.choosers[zipobj[0]]) # Add the Chooser to the PanedWindow.
+
+        # Create the Send and 
 
 title = "PyDashboard"
 dashboard = PyDashboard(Tk(), title, ("Step 1", "Step 2", "Step 3", "Step 4"), (("A", "B", "C"), ("D", "E", "F"), ("G", "H", "I"), ("X", "Y", "Z")), ("imgs/Steampunk RT_icon.png", "imgs/falca_small.jpg", "imgs/sir_costalot_small.png", "imgs/tomo_small.jpg"), ("RT Status", "Falca Status", "Sir Costalot status", "Tomo status"))
