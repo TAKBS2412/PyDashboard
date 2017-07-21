@@ -56,6 +56,7 @@ class PyDashboard(ttk.Frame):
     Creates a PyDashboard instance (see above description).
     Parameters:
         master - The master Frame.
+        headerlabeltext - The text that the header Label will display.
         headertexttup - A tuple. Each element in the tuple is the text that a Chooser's header Label will display.
         comboboxvaluestup - A tuple. Each element in the tuple is a tuple of values that a Chooser's Combobox will display.
         imgpathtup - A tuple. Each element in the tuple is a path to the image (as a string) that will be displayed by a Chooser.
@@ -63,12 +64,13 @@ class PyDashboard(ttk.Frame):
     titletup - A tuple. Each element in the tuple is the text that will be used as a title for the Chooser.
     The tuples must all be the same length, and the data within them must be "lined up" - therefore, the third element in headertexttup, the third element in comboboxvaluestup, and the third element in imgpathtup will all be used by the same Chooser.
     '''
-    def __init__(self, master=None, headertexttup=(), comboboxvaluestup=(), imgpathtup=(), titletup=(), **kw):
+    def __init__(self, master=None, headerlabeltext="", headertexttup=(), comboboxvaluestup=(), imgpathtup=(), titletup=(), **kw):
         ttk.Frame.__init__(self, master, **kw) # Call the superclass's constructor.
 
         self.grid() # Use the grid layout manager.
     
         # Set the values that were passed in as parameters.
+        self.headerlabeltext = headerlabeltext
         self.headertexttup = headertexttup
         self.comboboxvaluestup = comboboxvaluestup
         self.imgpathtup = imgpathtup
@@ -77,7 +79,7 @@ class PyDashboard(ttk.Frame):
         self.createWidgets() # Create the widgets that will be displayed to the user.
     def createWidgets(self):
         # Create the header Label
-        self.header = ttk.Label(self, text="PyDashboard") # Create the Label.
+        self.header = ttk.Label(self, text=self.headerlabeltext) # Create the Label.
         self.header.grid(row=0, column=0) # Add the Label to the PyDashboard.
 
         # Create the PanedWindow, which will contain the Robot Status Label and the Choosers.
@@ -99,7 +101,8 @@ class PyDashboard(ttk.Frame):
             self.choosers.append(Chooser(self.pane, zipobj[0]+1, zipobj[1], zipobj[2], zipobj[3], text=zipobj[4])) # Create a Chooser.
             self.choosers[zipobj[0]].grid(row=1, column=zipobj[0]+1) # Add the Chooser to the PyDashboard.
             self.pane.add(self.choosers[zipobj[0]]) # Add the Chooser to the PanedWindow.
-        
-dashboard = PyDashboard(Tk(), ("Step 1", "Step 2", "Step 3", "Step 4"), (("A", "B", "C"), ("D", "E", "F"), ("G", "H", "I"), ("X", "Y", "Z")), ("imgs/Steampunk RT_icon.png", "imgs/falca_small.jpg", "imgs/sir_costalot_small.png", "imgs/tomo_small.jpg"), ("RT Status", "Falca Status", "Sir Costalot status", "Tomo status"))
-dashboard.master.title("PyDashboard")
+
+title = "PyDashboard"
+dashboard = PyDashboard(Tk(), title, ("Step 1", "Step 2", "Step 3", "Step 4"), (("A", "B", "C"), ("D", "E", "F"), ("G", "H", "I"), ("X", "Y", "Z")), ("imgs/Steampunk RT_icon.png", "imgs/falca_small.jpg", "imgs/sir_costalot_small.png", "imgs/tomo_small.jpg"), ("RT Status", "Falca Status", "Sir Costalot status", "Tomo status"))
+dashboard.master.title(title)
 dashboard.mainloop()
