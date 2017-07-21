@@ -59,6 +59,7 @@ class PyDashboard(ttk.Frame):
         headertexttup - A tuple. Each element in the tuple is the text that a Chooser's header Label will display.
         comboboxvaluestup - A tuple. Each element in the tuple is a tuple of values that a Chooser's Combobox will display.
         imgpathtup - A tuple. Each element in the tuple is a path to the image (as a string) that will be displayed by a Chooser.
+        titletup - A tuple. Each element in the tuple is the text that will be displayed by the Chooser.
     titletup - A tuple. Each element in the tuple is the text that will be used as a title for the Chooser.
     The tuples must all be the same length, and the data within them must be "lined up" - therefore, the third element in headertexttup, the third element in comboboxvaluestup, and the third element in imgpathtup will all be used by the same Chooser.
     '''
@@ -75,7 +76,6 @@ class PyDashboard(ttk.Frame):
 
         self.createWidgets() # Create the widgets that will be displayed to the user.
     def createWidgets(self):
-
         # Create the header Label
         self.header = ttk.Label(self, text="PyDashboard") # Create the Label.
         self.header.grid(row=0, column=0) # Add the Label to the PyDashboard.
