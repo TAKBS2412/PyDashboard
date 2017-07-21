@@ -47,8 +47,8 @@ class Chooser(ttk.LabelFrame):
 
 '''
 This class represents the GUI for PyDashboard.
-It contains widgets that are laid out in the general fashion of this image: https://drive.google.com/file/d/0B_62XHEIagxyUi0yLV9uT1JFS3M/view?usp=sharing
-
+It contains widgets that are laid out in the general fashion of this image: https://drive.google.com/file/d/0B_62XHEIagxyUi0yLV9uT1JFS3M/view?usp=sharing.
+Each rectangle to the right of and in the same row as the rectangle labeled "Robot Status" (but not including the "Robot Status" rectangle itself) is a Chooser.
 '''
 class PyDashboard(ttk.Frame):
 
@@ -56,24 +56,39 @@ class PyDashboard(ttk.Frame):
     Creates a PyDashboard instance (see above description).
     Parameters:
         master - The master Frame.
+        headertexttup - A tuple. Each element in the tuple is the text that a Chooser's header Label will display.
+        comboboxvaluestup - A tuple. Each element in the tuple is a tuple of values that a Chooser's Combobox will display.
+        imgpathtup - A tuple. Each element in the tuple is a path to the image (as a string) that will be displayed by a Chooser.
+    titletup - A tuple. Each element in the tuple is the text that will be used as a title for the Chooser.
+    The tuples must all be the same length, and the data within them must be "lined up" - therefore, the third element in headertexttup, the third element in comboboxvaluestup, and the third element in imgpathtup will all be used by the same Chooser.
     '''
-    def __init__(self, master=None):
-        ttk.Frame.__init__(self, master) # Call the superclass's constructor.
+    def __init__(self, master=None, headertexttup=(), comboboxvaluestup=(), imgpathtup=(), titletup=(), **kw):
+        ttk.Frame.__init__(self, master, **kw) # Call the superclass's constructor.
 
         self.grid() # Use the grid layout manager.
+    
+        # Set the values that were passed in as parameters.
+        self.headertexttup = headertexttup
+        self.comboboxvaluestup = comboboxvaluestup
+        self.imgpathtup = imgpathtup
+        self.titletup = titletup
+
         self.createWidgets() # Create the widgets that will be displayed to the user.
     def createWidgets(self):
         self.header = ttk.Label(self, text="PyDashboard")
         self.header.grid(row=0, column=0)
         
         self.pane = ttk.PanedWindow(self, orient=HORIZONTAL)
-        self.pane.grid(row=1, column=0, columnspan=2)
+        self.pane.grid(row=1, column=0)
+
+        # Create an array of all of the choosers and add them.
+        self.choosers = []
+
+        for zipobj in zip(range(len(self.headertexttup)), self.headertexttup, self.comboboxvaluestup, self.imgpathtup, self.titletup):
+            self.choosers.append(Chooser(self.pane, zipobj[0], zipobj[1], zipobj[2], zipobj[3], text=zipobj[4]))
+            self.choosers[zipobj[0]].grid(row=1, column=zipobj[0])
+            self.pane.add(self.choosers[zipobj[0]])
         
-        self.robotStatus = Chooser(self.pane, 0, "Step 1", ("A", "B", "C"), "imgs/Steampunk RT_icon.png", text="Robot Status", width=1920, height=1080)
-        self.robotStatus.grid(row=1, column=0, rowspan=2, columnspan=2)
-        
-        self.pane.add(self.robotStatus)
-        
-dashboard = PyDashboard(Tk())
+dashboard = PyDashboard(Tk(), ("Step 1", "Step 2", "Step 3", "Step 4"), (("A", "B", "C"), ("D", "E", "F"), ("G", "H", "I"), ("X", "Y", "Z")), ("imgs/Steampunk RT_icon.png", "imgs/falca_small.jpg", "imgs/sir_costalot_small.png", "imgs/tomo_small.jpg"), ("RT Status", "Falca Status", "Sir Costalot status", "Tomo status"))
 dashboard.master.title("PyDashboard")
 dashboard.mainloop()
