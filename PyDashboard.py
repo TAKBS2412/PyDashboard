@@ -94,20 +94,28 @@ class PyDashboard(ttk.Frame):
         self.option_add("*Font", self.bodyfont)
 
         # Create theme
-        '''
         self.bodystyle = ttk.Style(self) # Create a style.
         self.bodystyle.theme_create("Test", parent="default") # Create the theme.
-        self.bodystyle.configure("TButton", font=self.bodyfont) # Configure the style for a Button.
-        self.bodystyle.configure("TLabel", font=self.bodyfont) # Configure the style for a Label.
-        self.bodystyle.configure("TLabelframe.Label", font=self.bodyfont) # Configure the style for a Labelframe.
-        self.bodystyle.configure("*TCombobox*Listbox", font=self.bodyfont)
+        self.bodystyle.configure("TFrame", background="#575757", foreground="white") # Configure the style for the PyDashboard.
+        self.bodystyle.configure("TButton", foreground="black") # Configure the style for a Button.
+        #self.bodystyle.configure("TButton.Label", background="#575757", foreground="white") # Configure the style for a Button.
+        self.bodystyle.configure("TLabel", background="#575757", foreground="white") # Configure the style for a Label.
+        self.bodystyle.configure("TLabelframe.Label", background="#575757", foreground="white") # Configure the style for a Labelframe.
+        self.bodystyle.configure("TLabelframe", background="#575757", foreground="white")
+        self.bodystyle.configure("TCombobox", selectbackground="#575757", bordercolor="white")
+
+        self.option_add("*TCombobox*Listbox.background", "#575757")
+        self.option_add("*TCombobox*Listbox.foreground", "white")
+        self.option_add("*TCombobox*Listbox.selectForeground", "#575757")
+        self.option_add("*TCombobox*Listbox.selectBackground", "white")
+        
         self.bodystyle.theme_use("vista")
-        '''
+        
         self.createWidgets() # Create the widgets that will be displayed to the user.
     def createWidgets(self):
         # Create the header Label
         self.header = ttk.Label(self, text=self.headerlabeltext) # Create the Label.
-        self.header.grid(row=0, column=0) # Add the Label to the PyDashboard.
+        self.header.grid(row=0, column=1) # Add the Label to the PyDashboard.
 
         # Create the Connect and Send buttons.
         self.connectbtn = ttk.Button(self, text="Connect", command=connect) # Create the Connect button.
