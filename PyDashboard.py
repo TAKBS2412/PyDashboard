@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import font
 from tkinter import ttk
 from PIL import ImageTk, Image
 
@@ -84,6 +85,22 @@ class PyDashboard(ttk.Frame):
         self.imgpathtup = imgpathtup
         self.titletup = titletup
 
+        self.bodyfont = font.Font(family="BankGothic", size=11)
+
+        self.defaultfont = font.nametofont("TkDefaultFont")
+        self.defaultfont.configure(family="BankGothic")
+        self.option_add("*Font", self.bodyfont)
+
+        # Create theme
+        '''
+        self.bodystyle = ttk.Style(self) # Create a style.
+        self.bodystyle.theme_create("Test", parent="default") # Create the theme.
+        self.bodystyle.configure("TButton", font=self.bodyfont) # Configure the style for a Button.
+        self.bodystyle.configure("TLabel", font=self.bodyfont) # Configure the style for a Label.
+        self.bodystyle.configure("TLabelframe.Label", font=self.bodyfont) # Configure the style for a Labelframe.
+        self.bodystyle.configure("*TCombobox*Listbox", font=self.bodyfont)
+        self.bodystyle.theme_use("vista")
+        '''
         self.createWidgets() # Create the widgets that will be displayed to the user.
     def createWidgets(self):
         # Create the header Label
@@ -117,6 +134,6 @@ class PyDashboard(ttk.Frame):
             self.pane.add(self.choosers[zipobj[0]]) # Add the Chooser to the PanedWindow.
 
 title = "PyDashboard"
-dashboard = PyDashboard(Tk(), title, ("Choose an autonomous mode:", "Falca will drive forward to the baseline using...", "Falca will turn towards the peg using...", "Falca will drive towards the peg using..."), (("Drive forward (if selected, ignore Steps 3 and 4)", "Left Peg", "Center Peg (if selected, ignore Step 3", "Right Peg"), ("Motion Profiling", "Time-Based", "Encoders"), ("Vision Processing", "Gyroscope"), ("Vision Processing", "Encoders")), ("imgs/Steampunk RT_icon.png", "imgs/falca_small.jpg", "imgs/sir_costalot_small.png", "imgs/tomo_small.jpg"), ("Step 1", "Step 2", "Step 3", "Step 4"))
+dashboard = PyDashboard(Tk(), title, ("Choose an autonomous mode:", "Falca will drive forward to the baseline using...", "Falca will turn towards the peg using...", "Falca will drive towards the peg using..."), (("Drive forward (if selected, ignore Steps 3 and 4)", "Left Peg", "Center Peg (if selected, ignore Step 3", "Right Peg"), ("Motion Profiling", "Time-Based", "Encoders"), ("Vision Processing", "Gyroscope"), ("Vision Processing", "Encoders")), ("imgs/Step1.png", "imgs/Step2.png", "imgs/Step3.png", "imgs/Step4.png"), ("Step 1", "Step 2", "Step 3", "Step 4"))
 dashboard.master.title(title)
 dashboard.mainloop()
