@@ -26,4 +26,10 @@ class Data:
     '''
     def __init__(self):
         self.dataitems = [] # Create an empty array of DataItems.
+
+    '''
+    Adds a DataItem.
+    '''
+    def addDataItem(self, dataitem):
+        self.dataitems.append(dataitem)
         
