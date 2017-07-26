@@ -7,16 +7,20 @@ from PIL import ImageTk, Image
 # Called when the connect button is pressed
 def connect():
     print("Connect attempt made.")
-    if not networking:
-        networking = Networking.Networking("10.24.12.51")
-
+    networking = Networking.Networking("10.24.12.51") # Try to connect to 10.24.12.51.
+    # Update GUI.
+    if networking.isConnected():
+        dashboard.robotstatus.config(text="Robot Connected")
+    else:
+        dashboard.robotstatus.config(text="Robot Disconnected")
+        
 # Called when the send button is pressed.
 def send():
     print("(hopefully) Sending values...")
     networking.sendData("Step1", dashboard.step1.dropdownvar.get())
-    networking.sendData("Step2", dashboard.step2.dropdownvar.get()))
-    networking.sendData(Data.DataItem("Step3", dashboard.step3.dropdownvar.get())
-    networking.sendData(Data.DataItem("Step4", dashboard.step4.dropdownvar.get())
+    networking.sendData("Step2", dashboard.step2.dropdownvar.get())
+    networking.sendData("Step3", dashboard.step3.dropdownvar.get())
+    networking.sendData("Step4", dashboard.step4.dropdownvar.get())
 
 '''
 This class is a subclass of ttk.LabelFrame.
@@ -163,11 +167,12 @@ class PyDashboard(ttk.Frame):
         self.step4.grid(row=2, column=2) # Add Step 4 Chooser to the PyDashboard.
         self.pane3and4.add(self.step4) # Add the Chooser to the PanedWindow.
 
-networking = None
-
 title = "PyDashboard"
 root = Tk()
 dashboard = PyDashboard(root, title, ("Choose an autonomous mode:", "Falca will drive forward to the baseline using...", "Falca will turn towards the peg using...", "Falca will drive towards the peg using..."), (("Drive forward", "Left Peg", "Center Peg", "Right Peg"), ("Motion Profiling", "Time-Based", "Encoders"), ("Vision Processing", "Gyroscope"), ("Vision Processing", "Encoders")), ("imgs/Step1.png", "imgs/Step2.png", "imgs/Step3.png", "imgs/Step4.png"), ("Step 1", "Step 2", "Step 3 (ignore if Center Peg or Drive Forward are selected in Step 1)", "Step 4 (ignore if Drive Forward is selected in Step 1)"))
 dashboard.master.title(title)
 root.iconbitmap("Steampunk RT_icon.ico")
 dashboard.mainloop()
+
+networking = None
+connect() # Try to connect.
