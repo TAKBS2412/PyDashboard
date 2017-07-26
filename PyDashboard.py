@@ -1,3 +1,4 @@
+import Data
 from tkinter import *
 from tkinter import font
 from tkinter import ttk
@@ -10,6 +11,13 @@ def connect():
 # Called when the send button is pressed.
 def send():
     print("(hopefully) Sending values...")
+    data.addDataItem(Data.DataItem("Step1", dashboard.step1.dropdownvar.get()))
+    data.addDataItem(Data.DataItem("Step2", dashboard.step2.dropdownvar.get()))
+    data.addDataItem(Data.DataItem("Step3", dashboard.step3.dropdownvar.get()))
+    data.addDataItem(Data.DataItem("Step4", dashboard.step4.dropdownvar.get()))
+    for item in data.dataitems:
+        print("Key: " + str(item.key))
+        print("Value: " + str(item.value))
 
 '''
 This class is a subclass of ttk.LabelFrame.
@@ -155,6 +163,8 @@ class PyDashboard(ttk.Frame):
         self.step4 = Chooser(self.pane3and4, 2, 2, self.headertexttup[3], self.comboboxvaluestup[3], self.imgpathtup[3], text=self.titletup[3])
         self.step4.grid(row=2, column=2) # Add Step 4 Chooser to the PyDashboard.
         self.pane3and4.add(self.step4) # Add the Chooser to the PanedWindow.
+
+data = Data.Data()
 
 title = "PyDashboard"
 root = Tk()
