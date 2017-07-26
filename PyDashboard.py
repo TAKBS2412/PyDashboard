@@ -159,7 +159,7 @@ class PyDashboard(ttk.Frame):
 
 title = "PyDashboard"
 root = Tk()
-dashboard = PyDashboard(root, title, ("Choose an autonomous mode:", "Falca will drive forward to the baseline using...", "Falca will turn towards the peg using...", "Falca will drive towards the peg using..."), (("Drive forward (if selected, ignore Steps 3 and 4)", "Left Peg", "Center Peg (if selected, ignore Step 3", "Right Peg"), ("Motion Profiling", "Time-Based", "Encoders"), ("Vision Processing", "Gyroscope"), ("Vision Processing", "Encoders")), ("imgs/Step1.png", "imgs/Step2.png", "imgs/Step3.png", "imgs/Step4.png"), ("Step 1", "Step 2", "Step 3", "Step 4"))
+dashboard = PyDashboard(root, title, ("Choose an autonomous mode:", "Falca will drive forward to the baseline using...", "Falca will turn towards the peg using...", "Falca will drive towards the peg using..."), (("Drive forward", "Left Peg", "Center Peg", "Right Peg"), ("Motion Profiling", "Time-Based", "Encoders"), ("Vision Processing", "Gyroscope"), ("Vision Processing", "Encoders")), ("imgs/Step1.png", "imgs/Step2.png", "imgs/Step3.png", "imgs/Step4.png"), ("Step 1", "Step 2", "Step 3 (ignore if Center Peg or Drive Forward are selected in Step 1)", "Step 4 (ignore if Drive Forward is selected in Step 1)"))
 dashboard.master.title(title)
 root.iconbitmap("Steampunk RT_icon.ico")
 dashboard.mainloop()
