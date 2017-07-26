@@ -29,7 +29,15 @@ class Data:
 
     '''
     Adds a DataItem.
+    If a DataItem with the same key has already been added, replace the old dataitem with the new one.
     '''
     def addDataItem(self, dataitem):
+        # Check if a dataitem with the same key already exists.
+        # If it does, set its value to dataitem's value.
+        for item in self.dataitems:
+            if item.key == dataitem.key:
+                item.value = dataitem.value
+                return
+        # Add the dataitem.
         self.dataitems.append(dataitem)
         
