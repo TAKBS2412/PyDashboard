@@ -3,7 +3,17 @@ This class contains the data for a single Chooser that will be sent to the user.
 '''
 
 class DataItem:
-    pass
+
+    '''
+    Creates a DataItem instance (see above description).
+    Parameters:
+        key - The key to be sent to NetworkTables.
+        value - The value to be sent to NetworkTables.
+    '''
+    def __init__(self, key, value):
+        # Set the values that were passed in as parameters.
+        self.key = key
+        self.value = value
 
 '''
 This class contains the data that will be sent to the user.
