@@ -22,3 +22,8 @@ class Networking:
     '''
     def sendData(self, key, value):
         self.table.putString(key, value)
+    '''
+    Returns whether the robot is connected or not.
+    '''
+    def isConnected(self):
+        return self.table.isConnected()
