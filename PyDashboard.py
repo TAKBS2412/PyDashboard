@@ -157,17 +157,6 @@ class PyDashboard(ttk.Frame):
         self.step4.grid(row=2, column=2) # Add Step 4 Chooser to the PyDashboard.
         self.pane3and4.add(self.step4) # Add the Chooser to the PanedWindow.
 
-        '''
-        # Create an array of all of the choosers and add them.
-        self.choosers = []
-
-        # Create and add Choosers to the PyDashboard.
-        for zipobj in zip(range(len(self.headertexttup)), self.headertexttup, self.comboboxvaluestup, self.imgpathtup, self.titletup):
-            self.choosers.append(Chooser(self.pane, zipobj[0]+1, zipobj[1], zipobj[2], zipobj[3], text=zipobj[4])) # Create a Chooser.
-            self.choosers[zipobj[0]].grid(row=1, column=zipobj[0]+1) # Add the Chooser to the PyDashboard.
-            self.pane.add(self.choosers[zipobj[0]]) # Add the Chooser to the PanedWindow.
-        '''
-
 title = "PyDashboard"
 root = Tk()
 dashboard = PyDashboard(root, title, ("Choose an autonomous mode:", "Falca will drive forward to the baseline using...", "Falca will turn towards the peg using...", "Falca will drive towards the peg using..."), (("Drive forward (if selected, ignore Steps 3 and 4)", "Left Peg", "Center Peg (if selected, ignore Step 3", "Right Peg"), ("Motion Profiling", "Time-Based", "Encoders"), ("Vision Processing", "Gyroscope"), ("Vision Processing", "Encoders")), ("imgs/Step1.png", "imgs/Step2.png", "imgs/Step3.png", "imgs/Step4.png"), ("Step 1", "Step 2", "Step 3", "Step 4"))
