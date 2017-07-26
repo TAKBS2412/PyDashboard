@@ -16,3 +16,9 @@ class Networking:
         NetworkTables.initialize(server=ip)
         self.table = NetworkTables.getTable(tablename)
         
+    '''
+    Sends data over to the user using NetworkTables.
+    Assumes that the data is a string.
+    '''
+    def sendData(self, key, value):
+        self.table.putString(key, value)
