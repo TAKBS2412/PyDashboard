@@ -10,4 +10,10 @@ This class contains the data that will be sent to the user.
 '''
 
 class Data:
-    pass
+
+    '''
+    Creates a Data instance (see above description).
+    '''
+    def __init__(self):
+        self.dataitems = [] # Create an empty array of DataItems.
+        
