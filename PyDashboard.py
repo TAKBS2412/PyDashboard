@@ -1,4 +1,4 @@
-import Data
+import Networking
 from tkinter import *
 from tkinter import font
 from tkinter import ttk
@@ -7,17 +7,16 @@ from PIL import ImageTk, Image
 # Called when the connect button is pressed
 def connect():
     print("Connect attempt made.")
+    if not networking:
+        networking = Networking.Networking("10.24.12.51")
 
 # Called when the send button is pressed.
 def send():
     print("(hopefully) Sending values...")
-    data.addDataItem(Data.DataItem("Step1", dashboard.step1.dropdownvar.get()))
-    data.addDataItem(Data.DataItem("Step2", dashboard.step2.dropdownvar.get()))
-    data.addDataItem(Data.DataItem("Step3", dashboard.step3.dropdownvar.get()))
-    data.addDataItem(Data.DataItem("Step4", dashboard.step4.dropdownvar.get()))
-    for item in data.dataitems:
-        print("Key: " + str(item.key))
-        print("Value: " + str(item.value))
+    networking.sendData("Step1", dashboard.step1.dropdownvar.get())
+    networking.sendData("Step2", dashboard.step2.dropdownvar.get()))
+    networking.sendData(Data.DataItem("Step3", dashboard.step3.dropdownvar.get())
+    networking.sendData(Data.DataItem("Step4", dashboard.step4.dropdownvar.get())
 
 '''
 This class is a subclass of ttk.LabelFrame.
@@ -164,7 +163,7 @@ class PyDashboard(ttk.Frame):
         self.step4.grid(row=2, column=2) # Add Step 4 Chooser to the PyDashboard.
         self.pane3and4.add(self.step4) # Add the Chooser to the PanedWindow.
 
-data = Data.Data()
+networking = None
 
 title = "PyDashboard"
 root = Tk()
