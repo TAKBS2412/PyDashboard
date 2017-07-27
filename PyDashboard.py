@@ -132,11 +132,11 @@ class PyDashboard(ttk.Frame):
 
         # Create a PanedWindow, which will contain the Choosers for steps 1 and 2.
         self.pane1and2 = ttk.PanedWindow(self, orient=HORIZONTAL) # Create the PanedWindow.
-        self.pane1and2.grid(row=1, column=1) # Add the PanedWindow to the PyDashboard.
+        self.pane1and2.grid(row=1, column=1, sticky=(E, W)) # Add the PanedWindow to the PyDashboard.
 
         # Create and add Step 1 Chooser.
         self.step1 = Chooser(self.pane1and2, 1, 1, self.headertexttup[0], self.comboboxvaluestup[0], self.imgpathtup[0], networking, "Step1", text=self.titletup[0])
-        self.step1.grid(row=1, column=1) # Add Step 1 Chooser to the PyDashboard.
+        self.step1.grid(row=1, column=1, sticky=(E, W)) # Add Step 1 Chooser to the PyDashboard.
         self.pane1and2.add(self.step1) # Add the Chooser to the PanedWindow.
 
         # Create and add Step 2 Chooser.
