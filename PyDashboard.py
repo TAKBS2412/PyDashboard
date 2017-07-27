@@ -122,7 +122,7 @@ class PyDashboard(ttk.Frame):
         self.robotstatus = ttk.LabelFrame(self, text="Robot Status") # Create the LabelFrame itself.
         self.robotstatus.label = ttk.Label(self.robotstatus, text="Robot Disconnected") # Create the Label that will be displayed within the LabelFrame.
         self.robotstatus.label.grid(row=1, column=0) # Add the Label to the LabelFrame.
-        self.robotstatus.grid(row=1, column=0, rowspan=2) # Add the LabelFrame to the PyDashboard.
+        self.robotstatus.grid(row=1, column=0, rowspan=2, sticky=(N, S)) # Add the LabelFrame to the PyDashboard.
 
         # Create a PanedWindow, which will contain the Choosers for steps 1 and 2.
         self.pane1and2 = ttk.PanedWindow(self, orient=HORIZONTAL) # Create the PanedWindow.
