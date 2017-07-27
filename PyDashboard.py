@@ -4,24 +4,6 @@ from tkinter import font
 from tkinter import ttk
 from PIL import ImageTk, Image
 
-# Called when the connect button is pressed
-def connect():
-    print("Connect attempt made.")
-    networking = Networking.Networking("10.24.12.51") # Try to connect to 10.24.12.51.
-    # Update GUI.
-    if networking.isConnected():
-        dashboard.robotstatus.config(text="Robot Connected")
-    else:
-        dashboard.robotstatus.config(text="Robot Disconnected")
-        
-# Called when the send button is pressed.
-def send():
-    print("(hopefully) Sending values...")
-    networking.sendData("Step1", dashboard.step1.dropdownvar.get())
-    networking.sendData("Step2", dashboard.step2.dropdownvar.get())
-    networking.sendData("Step3", dashboard.step3.dropdownvar.get())
-    networking.sendData("Step4", dashboard.step4.dropdownvar.get())
-
 '''
 This class is a subclass of ttk.LabelFrame.
 It contains 3 widgets: A header (a Label), a Combobox, and an image.
@@ -83,9 +65,10 @@ class PyDashboard(ttk.Frame):
         comboboxvaluestup - A tuple. Each element in the tuple is a tuple of values that a Chooser's Combobox will display.
         imgpathtup - A tuple. Each element in the tuple is a path to the image (as a string) that will be displayed by a Chooser.
         titletup - A tuple. Each element in the tuple is the text that will be displayed by the Chooser.
+        networking - A Networking instance (see Networking module).
     The tuples must all be the same length, and the data within them must be "lined up" - therefore, the third element in headertexttup, the third element in comboboxvaluestup, and the third element in imgpathtup will all be used by the same Chooser.
     '''
-    def __init__(self, master=None, headerlabeltext="", headertexttup=(), comboboxvaluestup=(), imgpathtup=(), titletup=(), **kw):
+    def __init__(self, master=None, headerlabeltext="", headertexttup=(), comboboxvaluestup=(), imgpathtup=(), titletup=(), networking=None, **kw):
         ttk.Frame.__init__(self, master, **kw) # Call the superclass's constructor.
 
         self.grid() # Use the grid layout manager.
@@ -96,6 +79,8 @@ class PyDashboard(ttk.Frame):
         self.comboboxvaluestup = comboboxvaluestup
         self.imgpathtup = imgpathtup
         self.titletup = titletup
+
+        self.networking = networking
 
         self.bodyfont = font.Font(family="BankGothic", size=11)
 
@@ -128,9 +113,9 @@ class PyDashboard(ttk.Frame):
         self.header.grid(row=0, column=1) # Add the Label to the PyDashboard.
 
         # Create the Connect and Send buttons.
-        self.connectbtn = ttk.Button(self, text="Connect", command=connect) # Create the Connect button.
+        self.connectbtn = ttk.Button(self, text="Connect", command=self.connect) # Create the Connect button.
         self.connectbtn.grid(row=4, column=1) # Add the Connect button to the PyDashboard.
-        self.sendbtn = ttk.Button(self, text="Send", command=send) # Create the Send button.
+        self.sendbtn = ttk.Button(self, text="Send", command=self.send) # Create the Send button.
         self.sendbtn.grid(row=4, column=2) # Add the Send button to the PyDashboard.
 
         # Create the Robot Status LabelFrame.
@@ -167,12 +152,29 @@ class PyDashboard(ttk.Frame):
         self.step4.grid(row=2, column=2) # Add Step 4 Chooser to the PyDashboard.
         self.pane3and4.add(self.step4) # Add the Chooser to the PanedWindow.
 
+    # Called when the connect button is pressed
+    def connect(self):
+        print("Connect attempt made.")
+        
+        # Update GUI.
+        if self.networking.isConnected():
+            self.robotstatus.label["text"] = "Robot Connected"
+        else:
+            self.robotstatus.label["text"] = "Robot Disconnected"
+
+    # Called when the send button is pressed.
+    def send(self):
+        print("(hopefully) Sending values...")
+        self.networking.sendData("Step1", self.step1.dropdownvar.get())
+        self.networking.sendData("Step2", self.step2.dropdownvar.get())
+        self.networking.sendData("Step3", self.step3.dropdownvar.get())
+        self.networking.sendData("Step4", self.step4.dropdownvar.get())
+
+networking = Networking.Networking("10.24.12.51") # Try to connect to 10.24.12.51.
+
 title = "PyDashboard"
 root = Tk()
-dashboard = PyDashboard(root, title, ("Choose an autonomous mode:", "Falca will drive forward to the baseline using...", "Falca will turn towards the peg using...", "Falca will drive towards the peg using..."), (("Drive forward", "Left Peg", "Center Peg", "Right Peg"), ("Motion Profiling", "Time-Based", "Encoders"), ("Vision Processing", "Gyroscope"), ("Vision Processing", "Encoders")), ("imgs/Step1.png", "imgs/Step2.png", "imgs/Step3.png", "imgs/Step4.png"), ("Step 1", "Step 2", "Step 3 (ignore if Center Peg or Drive Forward are selected in Step 1)", "Step 4 (ignore if Drive Forward is selected in Step 1)"))
+dashboard = PyDashboard(root, title, ("Choose an autonomous mode:", "Falca will drive forward to the baseline using...", "Falca will turn towards the peg using...", "Falca will drive towards the peg using..."), (("Drive forward", "Left Peg", "Center Peg", "Right Peg"), ("Motion Profiling", "Time-Based", "Encoders"), ("Vision Processing", "Gyroscope"), ("Vision Processing", "Encoders")), ("imgs/Step1.png", "imgs/Step2.png", "imgs/Step3.png", "imgs/Step4.png"), ("Step 1", "Step 2", "Step 3 (ignore if Center Peg or Drive Forward are selected in Step 1)", "Step 4 (ignore if Drive Forward is selected in Step 1)"), networking)
 dashboard.master.title(title)
 root.iconbitmap("Steampunk RT_icon.ico")
 dashboard.mainloop()
-
-networking = None
-connect() # Try to connect.
