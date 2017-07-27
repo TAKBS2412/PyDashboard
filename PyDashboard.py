@@ -107,14 +107,14 @@ class PyDashboard(ttk.Frame):
         self.bodystyle.theme_use("vista")
         
         self.createWidgets() # Create the widgets that will be displayed to the user.
+
+        self.networking.addConnectionListener(self.updateRobotStatus, False)
     def createWidgets(self):
         # Create the header Label
         self.header = ttk.Label(self, text=self.headerlabeltext) # Create the Label.
         self.header.grid(row=0, column=1) # Add the Label to the PyDashboard.
 
-        # Create the Connect and Send buttons.
-        self.connectbtn = ttk.Button(self, text="Connect", command=self.connect) # Create the Connect button.
-        self.connectbtn.grid(row=4, column=1) # Add the Connect button to the PyDashboard.
+        # Create the Send button.
         self.sendbtn = ttk.Button(self, text="Send", command=self.send) # Create the Send button.
         self.sendbtn.grid(row=4, column=2) # Add the Send button to the PyDashboard.
 
@@ -152,12 +152,12 @@ class PyDashboard(ttk.Frame):
         self.step4.grid(row=2, column=2) # Add Step 4 Chooser to the PyDashboard.
         self.pane3and4.add(self.step4) # Add the Chooser to the PanedWindow.
 
-    # Called when the connect button is pressed
-    def connect(self):
+    # Updates the robot status LabelFrame.
+    def updateRobotStatus(self, connected, info):
         print("Connect attempt made.")
         
         # Update GUI.
-        if self.networking.isConnected():
+        if connected:
             self.robotstatus.label["text"] = "Robot Connected"
         else:
             self.robotstatus.label["text"] = "Robot Disconnected"

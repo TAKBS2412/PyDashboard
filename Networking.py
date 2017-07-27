@@ -27,3 +27,13 @@ class Networking:
     '''
     def isConnected(self):
         return self.table.isConnected()
+
+
+    '''
+    Adds a connection listener that will be called when a connection is made.
+    Parameters:
+        listener - This function will be called when a new connection is made.
+        immediateNotify - If the listener should be called immediately with any connection information.
+    '''
+    def addConnectionListener(self, listener, immediateNotify=False):
+        NetworkTables.addConnectionListener(listener, immediateNotify)
