@@ -45,6 +45,7 @@ class Chooser(ttk.LabelFrame):
         self.dropdownvar = StringVar() # Create a string variable (StringVar) that will hold the currently selected value.
         self.dropdown = ttk.Combobox(self, textvariable=self.dropdownvar) # Create the Combobox itself.
         self.dropdown["values"] = self.comboboxvalues # Set the values that were specified in the constructor.
+        self.dropdown["state"] = "readonly"
         self.dropdown.bind("<<ComboboxSelected>>", self.sendData)
         self.dropdown.grid(row=self.row+1, column=self.column) # Add to Frame.
 
@@ -57,6 +58,7 @@ class Chooser(ttk.LabelFrame):
     # Called when an option is selected.
     # Sends data using self.networking
     def sendData(self, event):
+        self.dropdown.selection_clear()
         self.networking.sendData(self.keyname, self.dropdownvar.get())
         
 '''
