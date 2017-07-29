@@ -73,24 +73,16 @@ class PyDashboard(ttk.Frame):
     Parameters:
         master - The master Frame.
         headerlabeltext - The text that the header Label will display.
-        headertexttup - A tuple. Each element in the tuple is the text that a Chooser's header Label will display.
-        comboboxvaluestup - A tuple. Each element in the tuple is a tuple of values that a Chooser's Combobox will display.
-        imgpathtup - A tuple. Each element in the tuple is a path to the image (as a string) that will be displayed by a Chooser.
-        titletup - A tuple. Each element in the tuple is the text that will be displayed by the Chooser.
         networking - A Networking instance (see Networking module).
     The tuples must all be the same length, and the data within them must be "lined up" - therefore, the third element in headertexttup, the third element in comboboxvaluestup, and the third element in imgpathtup will all be used by the same Chooser.
     '''
-    def __init__(self, master=None, headerlabeltext="", headertexttup=(), comboboxvaluestup=(), imgpathtup=(), titletup=(), networking=None, **kw):
+    def __init__(self, master=None, headerlabeltext="", networking=None, **kw):
         ttk.Frame.__init__(self, master, **kw) # Call the superclass's constructor.
 
         self.grid() # Use the grid layout manager.
     
         # Set the values that were passed in as parameters.
         self.headerlabeltext = headerlabeltext
-        self.headertexttup = headertexttup
-        self.comboboxvaluestup = comboboxvaluestup
-        self.imgpathtup = imgpathtup
-        self.titletup = titletup
 
         self.networking = networking
 
@@ -136,30 +128,32 @@ class PyDashboard(ttk.Frame):
         self.pane1and2 = ttk.PanedWindow(self, orient=HORIZONTAL) # Create the PanedWindow.
         self.pane1and2.grid(row=1, column=1, sticky=(E, W)) # Add the PanedWindow to the PyDashboard.
 
-        # Create and add Step 1 Chooser.
-        self.step1 = Chooser(self.pane1and2, 1, 1, self.headertexttup[0], self.comboboxvaluestup[0], self.imgpathtup[0], networking, "Step1", text=self.titletup[0])
-        self.step1.grid(row=1, column=1, sticky=(E, W)) # Add Step 1 Chooser to the PyDashboard.
-        self.pane1and2.add(self.step1) # Add the Chooser to the PanedWindow.
-
-        # Create and add Step 2 Chooser.
-        self.step2 = Chooser(self.pane1and2, 1, 2, self.headertexttup[1], self.comboboxvaluestup[1], self.imgpathtup[1], networking, "Step2", text=self.titletup[1])
-        self.step2.grid(row=1, column=2) # Add Step 2 Chooser to the PyDashboard.
-        self.pane1and2.add(self.step2) # Add the Chooser to the PanedWindow.
-
         # Create a PanedWindow, which will contain the Choosers for steps 3 and 4.
         self.pane3and4 = ttk.PanedWindow(self, orient=HORIZONTAL) # Create the PanedWindow.
         self.pane3and4.grid(row=2, column=1) # Add the PanedWindow to the PyDashboard.
 
-        # Create and add Step 3 Chooser.
-        self.step3 = Chooser(self.pane3and4, 2, 1, self.headertexttup[2], self.comboboxvaluestup[2], self.imgpathtup[2], networking, "Step3", text=self.titletup[2])
+    # Adds the Choosers to the PyDashboard.
+    def addChoosers(self, choosers):
+        # Add Step 1 Chooser.
+        self.step1 = choosers[0]
+        self.step1.grid(row=1, column=1, sticky=(E, W)) # Add Step 1 Chooser to the PyDashboard.
+        self.pane1and2.add(self.step1) # Add the Chooser to the PanedWindow.
+
+        # Add Step 2 Chooser.
+        self.step2 = choosers[1]
+        self.step2.grid(row=1, column=2) # Add Step 2 Chooser to the PyDashboard.
+        self.pane1and2.add(self.step2) # Add the Chooser to the PanedWindow.
+
+        # Add Step 3 Chooser.
+        self.step3 = choosers[2]
         self.step3.grid(row=2, column=1) # Add Step 3 Chooser to the PyDashboard.
         self.pane3and4.add(self.step3) # Add the Chooser to the PanedWindow.
 
-        # Create and add Step 4 Chooser.
-        self.step4 = Chooser(self.pane3and4, 2, 2, self.headertexttup[3], self.comboboxvaluestup[3], self.imgpathtup[3], networking, "Step4", text=self.titletup[3])
+        # Add Step 4 Chooser.
+        self.step4 = choosers[3]
         self.step4.grid(row=2, column=2) # Add Step 4 Chooser to the PyDashboard.
         self.pane3and4.add(self.step4) # Add the Chooser to the PanedWindow.
-
+        
     # Updates the robot status LabelFrame.
     def updateRobotStatus(self, connected, info):
         # Update GUI.
@@ -172,7 +166,14 @@ networking = Networking.Networking("10.24.12.51") # Try to connect to 10.24.12.5
 
 title = "PyDashboard"
 root = Tk()
-dashboard = PyDashboard(root, title, ("Choose an autonomous mode:", "Falca will drive forward to the baseline using...", "Falca will turn towards the peg using...", "Falca will drive towards the peg using..."), (("Drive forward", "Left Peg", "Center Peg", "Right Peg"), ("Motion Profiling", "Time-Based", "Encoders"), ("Vision Processing", "Gyroscope"), ("Vision Processing", "Encoders")), ("imgs/Step1.png", "imgs/Step2.png", "imgs/Step3.png", "imgs/Step4.png"), ("Step 1", "Step 2", "Step 3 (ignore if Center Peg or Drive Forward are selected in Step 1)", "Step 4 (ignore if Drive Forward is selected in Step 1)"), networking)
+dashboard = PyDashboard(root, title, networking)
 dashboard.master.title(title)
+choosers = [
+    Chooser(dashboard.pane1and2, 1, 1, "Choose an autonomous mode:", ("Drive forward", "Left Peg", "Center Peg", "Right Peg"), "imgs/Step1.png", networking, "Step1", text="Step 1"),
+    Chooser(dashboard.pane1and2, 1, 2, "Falca will drive forward to the baseline using...", ("Motion Profiling", "Time-Based", "Encoders"), "imgs/Step2.png", networking, "Step2", text="Step 2"),
+    Chooser(dashboard.pane3and4, 2, 1, "Falca will turn towards the peg using...", ("Vision Processing", "Gyroscope"), "imgs/Step3.png", networking, "Step3", text="Step 3 (ignore if Center Peg or Drive Forward are selected in Step 1)"),
+    Chooser(dashboard.pane3and4, 2, 2, "Falca will drive towards the peg using...", ("Vision Processing", "Encoders"), "imgs/Step4.png", networking, "Step4", text="Step 4 (ignore if Drive Forward is selected in Step 1)")
+]
+dashboard.addChoosers(choosers)
 root.iconbitmap("Steampunk RT_icon.ico")
 dashboard.mainloop()
