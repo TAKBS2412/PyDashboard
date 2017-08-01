@@ -26,6 +26,7 @@ class Data:
     '''
     def __init__(self):
         self.dataitems = [] # Create an empty array of DataItems.
+        self.observers = [] # Create an empty array of Observers.
 
     '''
     Adds a DataItem.
@@ -40,3 +41,25 @@ class Data:
                 return
         # Add the dataitem.
         self.dataitems.append(dataitem)
+
+    '''
+    Attaches an Observer.
+    '''
+    def attach(self, observer):
+        if observer not in self.observers:
+            self.observers.append(observer)
+
+    '''
+    Detaches an Observer.
+    '''
+    def detach(self, observer):
+        self.observers.remove(observer)
+
+    '''
+    Notifies all observers of a change.
+    Parameter:
+        changeditem - The DataItem that was changed.
+    '''
+    def notify(self, changeditem):
+        for observer in self.observers:
+            observer.update(changeditem)

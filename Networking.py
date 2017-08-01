@@ -1,20 +1,28 @@
 from networktables import NetworkTables
-
+import Data
+import Observer
 '''
 Sends data over to the user using NetworkTables.
 '''
-class Networking:
+class Networking(Observer.Observer):
 
     '''
     Creates a Networking instance (see above description).
     Parameters:
+        subject - The subject to observe.
         ip - The ip address to connect to.
         tablename - The name of the NetworkTable to connect to.
     '''
-    def __init__(self, ip="roborio-2412-frc.local", tablename="PyDashboard"):
+    def __init__(self, subject, ip="roborio-2412-frc.local", tablename="PyDashboard"):
+        self.subject = subject
+        self.subject.attach(self)
+        
         # Setup NetworkTables
         NetworkTables.initialize(server=ip)
         self.table = NetworkTables.getTable(tablename)
+        NetworkTables.addConnectionListener(self.listener, False)
+
+        self.subject.addDataItem(Data.DataItem("connectionstatus", self.isConnected()))
         
     '''
     Sends data over to the user using NetworkTables.
@@ -28,12 +36,17 @@ class Networking:
     def isConnected(self):
         return self.table.isConnected()
 
+    '''
+    Called when the connection status changes.
+    '''
+    def listener(self, connected, info):
+        self.subject.notify(Data.DataItem("connectionstatus", connected))
 
     '''
-    Adds a connection listener that will be called when a connection is made.
-    Parameters:
-        listener - This function will be called when a new connection is made.
-        immediateNotify - If the listener should be called immediately with any connection information.
+    Called when something in the subject changes.
+    Parameter:
+        changeditem - The DataItem that was changed.
     '''
-    def addConnectionListener(self, listener, immediateNotify=False):
-        NetworkTables.addConnectionListener(listener, immediateNotify)
+    def update(self, changeditem):
+        if changeditem.key.startswith("Step"):
+            self.sendData(changeditem.key, changeditem.value)

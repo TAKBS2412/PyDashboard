@@ -1,3 +1,5 @@
+import Observer
+import Data
 import Networking
 from tkinter import *
 from tkinter import font
@@ -5,35 +7,40 @@ from tkinter import ttk
 from PIL import ImageTk, Image
 
 '''
-This class is a subclass of ttk.LabelFrame.
+This class is a subclass of ttk.LabelFrame and Observer.
 It contains 3 widgets: A header (a Label), a Combobox, and an image.
 '''
 
-class Chooser(ttk.LabelFrame):
+class Chooser(ttk.LabelFrame, Observer.Observer):
 
     '''
     Creates a Chooser instance (see above description).
     Parameters:
+        subject - The subject to observe.
         master - The master Frame.
         row - The row in the grid that this Chooser will occupy.
         column - The column in the grid that this Chooser will occupy.
         headertext - The text that the header Label will display.
         comboboxvalues - A tuple of values that the Combobox will display.
-        imgpath - The path to the image (as a string) that will be displayed.
+        imgdict - A dictionary. Each key is an option that can be selected by the master Chooser. Each value is the path to the image (as a string) that will be displayed.
         networking - A Networking instance (see Networking module).
         keyname - The name of the key that this Chooser is associated with. The key will be sent (along with the currently selected mode) using networking.
     '''
-    def __init__(self, master=None, row=0, column=0, headertext="", comboboxvalues=(), imgpath="", networking=None, keyname="", **kw):
+    def __init__(self, subject, master=None, row=0, column=0, headertext="", comboboxvalues=(), imgdict={}, networking=None, keyname="", **kw):
         ttk.LabelFrame.__init__(self, master, **kw) # Call the superclass's constructor.
 
         # Set the values that were passed in as parameters.
+        self.subject = subject
         self.row = row
         self.column = column
         self.headertext = headertext
         self.comboboxvalues = comboboxvalues
-        self.imgpath = imgpath
+        self.imgdict = imgdict
         self.networking = networking
         self.keyname = keyname
+
+        self.subject.attach(self)
+        self.subject.addDataItem(Data.DataItem(keyname, ""))
         
         self.createWidgets() # Create the widgets that will be displayed to the user.
     def createWidgets(self):
@@ -49,42 +56,55 @@ class Chooser(ttk.LabelFrame):
         self.dropdown.bind("<<ComboboxSelected>>", self.sendData)
         self.dropdown.grid(row=self.row+1, column=self.column) # Add to Frame.
 
-        # Create an image from the path specified (self.imgpath) and display it to the user using a Label.
-        self.image = ImageTk.PhotoImage(Image.open(self.imgpath)) # Load the image.
+        # Create an image from the path specified (self.imgdict) and display it to the user using a Label.
+        self.image = ImageTk.PhotoImage(Image.open(self.imgdict["Drive forward"])) # Load the image.
         self.imagelabel = ttk.Label(self, image=self.image) # Create the Label that will be used to display the image.
         self.imagelabel.image = self.image # Make sure to keep a reference to the image - see http://effbot.org/tkinterbook/photoimage.htm.
         self.imagelabel.grid(row=self.row+2, column=self.column) # Add to Frame.
 
     # Called when an option is selected.
-    # Sends data using self.networking
+    # Notifies the subject.
     def sendData(self, event):
         self.dropdown.selection_clear()
-        self.networking.sendData(self.keyname, self.dropdownvar.get())
-        
+        self.subject.notify(Data.DataItem(self.keyname, self.dropdownvar.get()))
+
+    # Called when something in the subject changes.
+    # Parameter:
+    #     changeditem - The DataItem that was changed.
+    def update(self, changeditem):
+        if changeditem.key == "Step1":
+            # Set the image that will be displayed according to what was selected by the master Chooser.
+            self.imagelabel.image = ImageTk.PhotoImage(Image.open(self.imgdict[changeditem.value]))
+            self.imagelabel.configure(image=self.imagelabel.image)
+
 '''
 This class represents the GUI for PyDashboard.
 It contains widgets that are laid out in the general fashion of this image: https://drive.google.com/file/d/0B_62XHEIagxyUi0yLV9uT1JFS3M/view?usp=sharing.
 Each rectangle to the right of and in the same row as the rectangle labeled "Robot Status" (but not including the "Robot Status" rectangle itself) is a Chooser.
 '''
-class PyDashboard(ttk.Frame):
+class PyDashboard(ttk.Frame, Observer.Observer):
 
     '''
     Creates a PyDashboard instance (see above description).
     Parameters:
+        subject - The subject to observe.
         master - The master Frame.
         headerlabeltext - The text that the header Label will display.
         networking - A Networking instance (see Networking module).
     The tuples must all be the same length, and the data within them must be "lined up" - therefore, the third element in headertexttup, the third element in comboboxvaluestup, and the third element in imgpathtup will all be used by the same Chooser.
     '''
-    def __init__(self, master=None, headerlabeltext="", networking=None, **kw):
+    def __init__(self, subject, master=None, headerlabeltext="", networking=None, **kw):
         ttk.Frame.__init__(self, master, **kw) # Call the superclass's constructor.
 
         self.grid() # Use the grid layout manager.
     
         # Set the values that were passed in as parameters.
+        self.subject = subject
         self.headerlabeltext = headerlabeltext
 
         self.networking = networking
+
+        self.subject.attach(self)
 
         self.bodyfont = font.Font(family="BankGothic", size=11)
 
@@ -111,8 +131,6 @@ class PyDashboard(ttk.Frame):
         self.bodystyle.theme_use("vista")
         
         self.createWidgets() # Create the widgets that will be displayed to the user.
-
-        self.networking.addConnectionListener(self.updateRobotStatus, False)
     def createWidgets(self):
         # Create the header Label
         self.header = ttk.Label(self, text=self.headerlabeltext) # Create the Label.
@@ -154,25 +172,28 @@ class PyDashboard(ttk.Frame):
         self.step4.grid(row=2, column=2) # Add Step 4 Chooser to the PyDashboard.
         self.pane3and4.add(self.step4) # Add the Chooser to the PanedWindow.
         
-    # Updates the robot status LabelFrame.
-    def updateRobotStatus(self, connected, info):
-        # Update GUI.
-        if connected:
-            self.robotstatus.label["text"] = "Robot Connected"
-        else:
-            self.robotstatus.label["text"] = "Robot Disconnected"
-
-networking = Networking.Networking("10.24.12.51") # Try to connect to 10.24.12.51.
+    # Called when something in the subject changes.
+    # Parameter:
+    #     changeditem - The DataItem that was changed.
+    def update(self, changeditem):
+        if changeditem.key == "connectionstatus":
+            # Update GUI.
+            if changeditem.value:
+                self.robotstatus.label["text"] = "Robot Connected"
+            else:
+                self.robotstatus.label["text"] = "Robot Disconnected"
+subject = Data.Data()
+networking = Networking.Networking(subject, "10.24.12.51") # Try to connect to 10.24.12.51.
 
 title = "PyDashboard"
 root = Tk()
-dashboard = PyDashboard(root, title, networking)
+dashboard = PyDashboard(subject, root, title, networking)
 dashboard.master.title(title)
 choosers = [
-    Chooser(dashboard.pane1and2, 1, 1, "Choose an autonomous mode:", ("Drive forward", "Left Peg", "Center Peg", "Right Peg"), "imgs/Step1.png", networking, "Step1", text="Step 1"),
-    Chooser(dashboard.pane1and2, 1, 2, "Falca will drive forward to the baseline using...", ("Motion Profiling", "Time-Based", "Encoders"), "imgs/Step2.png", networking, "Step2", text="Step 2"),
-    Chooser(dashboard.pane3and4, 2, 1, "Falca will turn towards the peg using...", ("Vision Processing", "Gyroscope"), "imgs/Step3.png", networking, "Step3", text="Step 3 (ignore if Center Peg or Drive Forward are selected in Step 1)"),
-    Chooser(dashboard.pane3and4, 2, 2, "Falca will drive towards the peg using...", ("Vision Processing", "Encoders"), "imgs/Step4.png", networking, "Step4", text="Step 4 (ignore if Drive Forward is selected in Step 1)")
+    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose an autonomous mode:", ("Drive forward", "Left Peg", "Center Peg", "Right Peg"), {"Drive forward" : "imgs/Step1/Step1_Drive_forward.png", "Left Peg" : "imgs/Step1/Step1_left.png", "Center Peg" : "imgs/Step1/Step1_center.png", "Right Peg" : "imgs/Step1/Step1_right.png"}, networking, "Step1", text="Step 1"),
+    Chooser(subject, dashboard.pane1and2, 1, 2, "Falca will drive forward to the baseline using...", ("Motion Profiling", "Time-Based", "Encoders"), {"Drive forward" : "imgs/Step2/Step2_Drive_forward.png", "Left Peg" : "imgs/Step2/Step2_left.png", "Center Peg" : "imgs/Ignore this step.png", "Right Peg" : "imgs/Step2/Step2_right.png"}, networking, "Step2", text="Step 2"),
+    Chooser(subject, dashboard.pane3and4, 2, 1, "Falca will turn towards the peg using...", ("Vision Processing", "Gyroscope"), {"Drive forward" : "imgs/Ignore this step.png", "Left Peg" : "imgs/Step3/Step3_left.png", "Center Peg" : "imgs/Ignore this step.png", "Right Peg" : "imgs/Step3/Step3_right.png"}, networking, "Step3", text="Step 3 (ignore if Center Peg or Drive Forward are selected in Step 1)"),
+    Chooser(subject, dashboard.pane3and4, 2, 2, "Falca will drive towards the peg using...", ("Vision Processing", "Encoders"), {"Drive forward" : "imgs/Ignore this step.png", "Left Peg" : "imgs/Step4/Step4_left.png", "Center Peg" : "imgs/Step4/Step4_center.png", "Right Peg" : "imgs/Step4/Step4_right.png"}, networking, "Step4", text="Step 4 (ignore if Drive Forward is selected in Step 1)")
 ]
 dashboard.addChoosers(choosers)
 root.iconbitmap("Steampunk RT_icon.ico")
