@@ -63,6 +63,9 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
         self.imagelabel.image = self.image # Make sure to keep a reference to the image - see http://effbot.org/tkinterbook/photoimage.htm.
         self.imagelabel.grid(row=self.row+2, column=self.column) # Add to Frame.
 
+        # Update, just in case.
+        self.update(Data.DataItem("Step1", "Drive forward"))
+
     # Called when an option is selected.
     # Notifies the subject.
     def sendData(self, event):
@@ -75,8 +78,13 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
     def update(self, changeditem):
         if changeditem.key == "Step1":
             # Set the image that will be displayed according to what was selected by the master Chooser.
-            self.imagelabel.image = ImageTk.PhotoImage(Image.open(self.imgdict[changeditem.value]))
+            selectedval = self.imgdict[changeditem.value]
+            self.imagelabel.image = ImageTk.PhotoImage(Image.open(selectedval))
             self.imagelabel.configure(image=self.imagelabel.image)
+            if "Ignore" in selectedval:
+                self.dropdown["state"] = "disabled"
+            else:
+                self.dropdown["state"] = "readonly"
 
 '''
 This class represents the GUI for PyDashboard.
