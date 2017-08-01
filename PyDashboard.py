@@ -53,6 +53,7 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
         self.dropdown = ttk.Combobox(self, textvariable=self.dropdownvar) # Create the Combobox itself.
         self.dropdown["values"] = self.comboboxvalues # Set the values that were specified in the constructor.
         self.dropdown["state"] = "readonly"
+        self.dropdown.current(0)
         self.dropdown.bind("<<ComboboxSelected>>", self.sendData)
         self.dropdown.grid(row=self.row+1, column=self.column) # Add to Frame.
 
