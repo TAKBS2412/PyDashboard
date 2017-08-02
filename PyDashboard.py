@@ -53,7 +53,6 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
         self.dropdown = ttk.Combobox(self, textvariable=self.dropdownvar) # Create the Combobox itself.
         self.dropdown["values"] = self.comboboxvalues # Set the values that were specified in the constructor.
         self.dropdown["state"] = "readonly"
-        self.dropdown.current(0)
         self.dropdown.bind("<<ComboboxSelected>>", self.sendData)
         self.dropdown.grid(row=self.row+1, column=self.column) # Add to Frame.
 
@@ -62,9 +61,6 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
         self.imagelabel = ttk.Label(self, image=self.image) # Create the Label that will be used to display the image.
         self.imagelabel.image = self.image # Make sure to keep a reference to the image - see http://effbot.org/tkinterbook/photoimage.htm.
         self.imagelabel.grid(row=self.row+2, column=self.column) # Add to Frame.
-
-        # Update, just in case.
-        self.update(Data.DataItem("Step1", "Drive forward"))
 
     # Called when an option is selected.
     # Notifies the subject.
@@ -83,6 +79,7 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
             self.imagelabel.configure(image=self.imagelabel.image)
             if "Ignore" in selectedval:
                 self.dropdown["state"] = "disabled"
+                self.subject.notify(Data.DataItem(self.keyname, "DoNothing"))
             else:
                 self.dropdown["state"] = "readonly"
 
