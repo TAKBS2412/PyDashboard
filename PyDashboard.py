@@ -78,10 +78,13 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
             self.imagelabel.image = ImageTk.PhotoImage(Image.open(selectedval))
             self.imagelabel.configure(image=self.imagelabel.image)
             if "Ignore" in selectedval:
-                self.dropdown["state"] = "disabled"
-                self.subject.notify(Data.DataItem(self.keyname, "DoNothing"))
+                if str(self.dropdown["state"]) != "disabled":
+                    self.dropdown["state"] = "disabled"
+                    self.subject.notify(Data.DataItem(self.keyname, "DoNothing"))
             else:
-                self.dropdown["state"] = "readonly"
+                if str(self.dropdown["state"]) != "readonly":
+                    self.dropdown["state"] = "readonly"
+                    self.subject.notify(Data.DataItem(self.keyname, self.dropdownvar.get()))
 
 '''
 This class represents the GUI for PyDashboard.
@@ -189,7 +192,7 @@ class PyDashboard(ttk.Frame, Observer.Observer):
             else:
                 self.robotstatus.label["text"] = "Robot Disconnected"
 subject = Data.Data()
-networking = Networking.Networking(subject, "10.24.12.51") # Try to connect to 10.24.12.51.
+networking = Networking.Networking(subject, "10.24.12.2") # Try to connect to 10.24.12.51.
 
 title = "PyDashboard"
 root = Tk()
