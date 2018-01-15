@@ -29,6 +29,7 @@ class Networking(Observer.Observer):
     Assumes that the data is a string.
     '''
     def sendData(self, key, value):
+        print(value)
         self.table.putString(key, value)
     '''
     Returns whether the robot is connected or not.
@@ -48,5 +49,4 @@ class Networking(Observer.Observer):
         changeditem - The DataItem that was changed.
     '''
     def update(self, changeditem):
-        if changeditem.key.startswith("Step"):
-            self.sendData(changeditem.key, changeditem.value)
+        self.sendData(changeditem.key, changeditem.value)
