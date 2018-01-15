@@ -57,7 +57,7 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
         self.dropdown.grid(row=self.row+1, column=self.column) # Add to Frame.
 
         # Create an image from the path specified (self.imgdict) and display it to the user using a Label.
-        self.image = ImageTk.PhotoImage(Image.open(self.imgdict["Drive forward"])) # Load the image.
+        self.image = ImageTk.PhotoImage(Image.open(self.imgdict["Left"])) # Load the image.
         self.imagelabel = ttk.Label(self, image=self.image) # Create the Label that will be used to display the image.
         self.imagelabel.image = self.image # Make sure to keep a reference to the image - see http://effbot.org/tkinterbook/photoimage.htm.
         self.imagelabel.grid(row=self.row+2, column=self.column) # Add to Frame.
@@ -72,7 +72,7 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
     # Parameter:
     #     changeditem - The DataItem that was changed.
     def update(self, changeditem):
-        if changeditem.key == "Step1":
+        if changeditem.key == "startingPosition":
             # Set the image that will be displayed according to what was selected by the master Chooser.
             selectedval = self.imgdict[changeditem.value]
             self.imagelabel.image = ImageTk.PhotoImage(Image.open(selectedval))
@@ -161,7 +161,7 @@ class PyDashboard(ttk.Frame, Observer.Observer):
 
     # Adds the Choosers to the PyDashboard.
     def addChoosers(self, choosers):
-        # Add Step 1 Chooser.
+        # Add Starting Position Chooser.
         self.step1 = choosers[0]
         self.step1.grid(row=1, column=1, sticky=(E, W)) # Add Step 1 Chooser to the PyDashboard.
         self.pane1and2.add(self.step1) # Add the Chooser to the PanedWindow.
@@ -185,7 +185,7 @@ root = Tk()
 dashboard = PyDashboard(subject, root, title, networking)
 dashboard.master.title(title)
 choosers = [
-    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose an autonomous mode:", ("Drive forward", "Left Peg", "Center Peg", "Right Peg"), {"Drive forward" : "imgs/Step1/Step1_Drive_forward.png", "Left Peg" : "imgs/Step1/Step1_left.png", "Center Peg" : "imgs/Step1/Step1_center.png", "Right Peg" : "imgs/Step1/Step1_right.png"}, networking, "Step1", text="Step 1")
+    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", ("Left", "Center", "Right"), {"Left" : "imgs/Step1/Step1_left.png", "Center" : "imgs/Step1/Step1_center.png", "Right" : "imgs/Step1/Step1_right.png"}, networking, "startingPosition", text="Starting Position")
     
 ]
 dashboard.addChoosers(choosers)
