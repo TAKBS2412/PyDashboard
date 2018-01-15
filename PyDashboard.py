@@ -166,20 +166,6 @@ class PyDashboard(ttk.Frame, Observer.Observer):
         self.step1.grid(row=1, column=1, sticky=(E, W)) # Add Step 1 Chooser to the PyDashboard.
         self.pane1and2.add(self.step1) # Add the Chooser to the PanedWindow.
 
-        # Add Step 2 Chooser.
-        self.step2 = choosers[1]
-        self.step2.grid(row=1, column=2) # Add Step 2 Chooser to the PyDashboard.
-        self.pane1and2.add(self.step2) # Add the Chooser to the PanedWindow.
-
-        # Add Step 3 Chooser.
-        self.step3 = choosers[2]
-        self.step3.grid(row=2, column=1) # Add Step 3 Chooser to the PyDashboard.
-        self.pane3and4.add(self.step3) # Add the Chooser to the PanedWindow.
-
-        # Add Step 4 Chooser.
-        self.step4 = choosers[3]
-        self.step4.grid(row=2, column=2) # Add Step 4 Chooser to the PyDashboard.
-        self.pane3and4.add(self.step4) # Add the Chooser to the PanedWindow.
         
     # Called when something in the subject changes.
     # Parameter:
@@ -199,10 +185,8 @@ root = Tk()
 dashboard = PyDashboard(subject, root, title, networking)
 dashboard.master.title(title)
 choosers = [
-    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose an autonomous mode:", ("Drive forward", "Left Peg", "Center Peg", "Right Peg"), {"Drive forward" : "imgs/Step1/Step1_Drive_forward.png", "Left Peg" : "imgs/Step1/Step1_left.png", "Center Peg" : "imgs/Step1/Step1_center.png", "Right Peg" : "imgs/Step1/Step1_right.png"}, networking, "Step1", text="Step 1"),
-    Chooser(subject, dashboard.pane1and2, 1, 2, "Falca will drive forward to the baseline using...", ("Motion Profiling", "Time-Based", "Encoders"), {"Drive forward" : "imgs/Step2/Step2_Drive_forward.png", "Left Peg" : "imgs/Step2/Step2_left.png", "Center Peg" : "imgs/Ignore this step.png", "Right Peg" : "imgs/Step2/Step2_right.png"}, networking, "Step2", text="Step 2"),
-    Chooser(subject, dashboard.pane3and4, 2, 1, "Falca will turn towards the peg using...", ("Vision Processing", "Gyroscope", "Time-Based"), {"Drive forward" : "imgs/Ignore this step.png", "Left Peg" : "imgs/Step3/Step3_left.png", "Center Peg" : "imgs/Ignore this step.png", "Right Peg" : "imgs/Step3/Step3_right.png"}, networking, "Step3", text="Step 3"),
-    Chooser(subject, dashboard.pane3and4, 2, 2, "Falca will drive towards the peg using...", ("Vision Processing", "Encoders", "Time-Based"), {"Drive forward" : "imgs/Ignore this step.png", "Left Peg" : "imgs/Step4/Step4_left.png", "Center Peg" : "imgs/Step4/Step4_center.png", "Right Peg" : "imgs/Step4/Step4_right.png"}, networking, "Step4", text="Step 4")
+    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose an autonomous mode:", ("Drive forward", "Left Peg", "Center Peg", "Right Peg"), {"Drive forward" : "imgs/Step1/Step1_Drive_forward.png", "Left Peg" : "imgs/Step1/Step1_left.png", "Center Peg" : "imgs/Step1/Step1_center.png", "Right Peg" : "imgs/Step1/Step1_right.png"}, networking, "Step1", text="Step 1")
+    
 ]
 dashboard.addChoosers(choosers)
 root.iconbitmap("Steampunk RT_icon.ico")
