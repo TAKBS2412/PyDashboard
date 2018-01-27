@@ -88,6 +88,15 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
                 if str(self.dropdown["state"]) != "readonly":
                     self.dropdown["state"] = "readonly"
                     self.subject.notify(Data.DataItem(self.keyname, self.dropdownvar.get()))
+        elif changeditem.key == "Checkbox":
+            if changeditem.value == 0 and self.keyname == "automode":
+                self.dropdown["state"] = "disabled"
+                self.imagelabel.image = ImageTk.PhotoImage(Image.open("imgs/2018/Ignore this step.png"))
+                self.imagelabel.configure(image=self.imagelabel.image)
+            else:
+                self.dropdown["state"] = "readonly"
+                self.imagelabel.image = ImageTk.PhotoImage(Image.open(self.imgdict[next(iter(self.imgdict.keys()))]))
+                self.imagelabel.configure(image=self.imagelabel.image)
 
 '''
 This class represents the GUI for PyDashboard.
@@ -134,6 +143,7 @@ class PyDashboard(ttk.Frame, Observer.Observer):
         self.bodystyle.configure("TLabelframe.Label", background="#575757", foreground="white") # Configure the style for a Labelframe.
         self.bodystyle.configure("TLabelframe", background="#575757", foreground="white")
         self.bodystyle.configure("TCombobox", selectbackground="#575757", bordercolor="white")
+        self.bodystyle.configure("TCheckbutton", background="#575757", foreground="white")
 
         self.option_add("*TCombobox*Listbox.background", "#575757")
         self.option_add("*TCombobox*Listbox.foreground", "white")
@@ -169,9 +179,18 @@ class PyDashboard(ttk.Frame, Observer.Observer):
         self.step1.grid(row=1, column=1, sticky=(E, W)) # Add Step 1 Chooser to the PyDashboard.
         self.pane1and2.add(self.step1) # Add the Chooser to the PanedWindow.
         self.step2 = choosers[1]
-        self.step2.grid(row=1, column=2, sticky=(E, W)) # Add Step 1 Chooser to the PyDashboard.
+        self.step2.grid(row=1, column=2, sticky=(E, W)) # Add Step 2 Chooser to the PyDashboard.
         self.pane1and2.add(self.step2) # Add the Chooser to the PanedWindow.
 
+        # Create a Checkbutton to enable/disable the Autonomous Mode Chooser.
+        self.checkboxvar = IntVar()
+        self.checkbox = ttk.Checkbutton(self.step2, text="Enable Chooser", variable=self.checkboxvar, command=self.oncheck) # Create the Checkbutton
+        self.checkbox.grid(row=4, column=2)
+        self.oncheck()
+
+    # Called when the checkbox is checked/unchecked.
+    def oncheck(self):
+        subject.notify(Data.DataItem("Checkbox", self.checkboxvar.get()))
         
     # Called when something in the subject changes.
     # Parameter:
