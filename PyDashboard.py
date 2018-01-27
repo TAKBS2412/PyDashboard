@@ -57,7 +57,10 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
         self.dropdown.grid(row=self.row+1, column=self.column) # Add to Frame.
 
         # Create an image from the path specified (self.imgdict) and display it to the user using a Label.
-        self.image = ImageTk.PhotoImage(Image.open(self.imgdict["Left"])) # Load the image.
+        if "Left" in self.imgdict:
+            self.image = ImageTk.PhotoImage(Image.open(self.imgdict["Left"]))
+        else:
+            self.image = ImageTk.PhotoImage(Image.open(self.imgdict[next(iter(self.imgdict.keys()))]))            
         self.imagelabel = ttk.Label(self, image=self.image) # Create the Label that will be used to display the image.
         self.imagelabel.image = self.image # Make sure to keep a reference to the image - see http://effbot.org/tkinterbook/photoimage.htm.
         self.imagelabel.grid(row=self.row+2, column=self.column) # Add to Frame.
@@ -72,7 +75,7 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
     # Parameter:
     #     changeditem - The DataItem that was changed.
     def update(self, changeditem):
-        if changeditem.key == "startingPosition":
+        if changeditem.key == self.keyname:
             # Set the image that will be displayed according to what was selected by the master Chooser.
             selectedval = self.imgdict[changeditem.value]
             self.imagelabel.image = ImageTk.PhotoImage(Image.open(selectedval))
@@ -165,6 +168,9 @@ class PyDashboard(ttk.Frame, Observer.Observer):
         self.step1 = choosers[0]
         self.step1.grid(row=1, column=1, sticky=(E, W)) # Add Step 1 Chooser to the PyDashboard.
         self.pane1and2.add(self.step1) # Add the Chooser to the PanedWindow.
+        self.step2 = choosers[1]
+        self.step2.grid(row=1, column=2, sticky=(E, W)) # Add Step 1 Chooser to the PyDashboard.
+        self.pane1and2.add(self.step2) # Add the Chooser to the PanedWindow.
 
         
     # Called when something in the subject changes.
@@ -185,8 +191,8 @@ root = Tk()
 dashboard = PyDashboard(subject, root, title, networking)
 dashboard.master.title(title)
 choosers = [
-    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", ("Left", "Center", "Right"), {"Left" : "imgs/2018/left.png", "Center" : "imgs/2018/center.png", "Right" : "imgs/2018/right.png"}, networking, "startingPosition", text="Starting Position")
-    
+    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", ("Left", "Center", "Right"), {"Left" : "imgs/2018/Step 1/left.png", "Center" : "imgs/2018/Step 1/center.png", "Right" : "imgs/2018/Step 1/right.png"}, networking, "startingPosition", text="Starting Position"),
+    Chooser(subject, dashboard.pane1and2, 1, 2, "Choose an autonomous mode:", ("Autodetect", "Drive forward", "Place cube"), {"Autodetect" : "imgs/2018/Step 2/autodetect.png", "Drive forward" : "imgs/2018/Step 2/drive_forward.png", "Place cube" : "imgs/2018/Step 2/place_cube.png"}, networking, "automode", text="Autonomous mode")
 ]
 dashboard.addChoosers(choosers)
 root.iconbitmap("Steampunk RT_icon.ico")
