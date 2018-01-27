@@ -192,7 +192,7 @@ dashboard = PyDashboard(subject, root, title, networking)
 dashboard.master.title(title)
 choosers = [
     Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", ("Left", "Center", "Right"), {"Left" : "imgs/2018/Step 1/left.png", "Center" : "imgs/2018/Step 1/center.png", "Right" : "imgs/2018/Step 1/right.png"}, networking, "startingPosition", text="Starting Position"),
-    Chooser(subject, dashboard.pane1and2, 1, 2, "Choose an autonomous mode:", ("Autodetect", "Drive forward", "Place cube"), {"Autodetect" : "imgs/2018/Step 2/autodetect.png", "Drive forward" : "imgs/2018/Step 2/drive_forward.png", "Place cube" : "imgs/2018/Step 2/place_cube.png"}, networking, "automode", text="Autonomous mode")
+    Chooser(subject, dashboard.pane1and2, 1, 2, "Choose an autonomous mode:", ("Autodetect", "Drive forward"), {"Autodetect" : "imgs/2018/Step 2/autodetect.png", "Drive forward" : "imgs/2018/Step 2/drive_forward.png"}, networking, "automode", text="Autonomous mode")
 ]
 dashboard.addChoosers(choosers)
 root.iconbitmap("Steampunk RT_icon.ico")
