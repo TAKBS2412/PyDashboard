@@ -185,7 +185,7 @@ root = Tk()
 dashboard = PyDashboard(subject, root, title, networking)
 dashboard.master.title(title)
 choosers = [
-    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", ("Left", "Center", "Right"), {"Left" : "imgs/2018/left.png", "Center" : "imgs/2018/center.png", "Right" : "imgs/2018/right.png"}, networking, "startingPosition", text="Starting Position")
+    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", ("Left", "Center", "Right", "Default"), {"Left" : "imgs/2018/left.png", "Center" : "imgs/2018/center.png", "Right" : "imgs/2018/right.png", "Default" : "imgs/2018/default.png"}, networking, "startingPosition", text="Starting Position")
     
 ]
 dashboard.addChoosers(choosers)
