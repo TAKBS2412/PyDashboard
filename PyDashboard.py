@@ -57,10 +57,7 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
         self.dropdown.grid(row=self.row+1, column=self.column) # Add to Frame.
 
         # Create an image from the path specified (self.imgdict) and display it to the user using a Label.
-        if "Left" in self.imgdict:
-            self.image = ImageTk.PhotoImage(Image.open(self.imgdict["Left"]))
-        else:
-            self.image = ImageTk.PhotoImage(Image.open(self.imgdict[next(iter(self.imgdict.keys()))]))            
+        self.image = ImageTk.PhotoImage(Image.open(self.imgdict["Left"])) # Load the image.
         self.imagelabel = ttk.Label(self, image=self.image) # Create the Label that will be used to display the image.
         self.imagelabel.image = self.image # Make sure to keep a reference to the image - see http://effbot.org/tkinterbook/photoimage.htm.
         self.imagelabel.grid(row=self.row+2, column=self.column) # Add to Frame.
@@ -75,7 +72,7 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
     # Parameter:
     #     changeditem - The DataItem that was changed.
     def update(self, changeditem):
-        if changeditem.key == self.keyname:
+        if changeditem.key == "startingPosition":
             # Set the image that will be displayed according to what was selected by the master Chooser.
             selectedval = self.imgdict[changeditem.value]
             self.imagelabel.image = ImageTk.PhotoImage(Image.open(selectedval))
@@ -88,15 +85,6 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
                 if str(self.dropdown["state"]) != "readonly":
                     self.dropdown["state"] = "readonly"
                     self.subject.notify(Data.DataItem(self.keyname, self.dropdownvar.get()))
-        elif changeditem.key == "Checkbox":
-            if changeditem.value == 0 and self.keyname == "automode":
-                self.dropdown["state"] = "disabled"
-                self.imagelabel.image = ImageTk.PhotoImage(Image.open("imgs/2018/Ignore this step.png"))
-                self.imagelabel.configure(image=self.imagelabel.image)
-            else:
-                self.dropdown["state"] = "readonly"
-                self.imagelabel.image = ImageTk.PhotoImage(Image.open(self.imgdict[next(iter(self.imgdict.keys()))]))
-                self.imagelabel.configure(image=self.imagelabel.image)
 
 '''
 This class represents the GUI for PyDashboard.
@@ -143,7 +131,6 @@ class PyDashboard(ttk.Frame, Observer.Observer):
         self.bodystyle.configure("TLabelframe.Label", background="#575757", foreground="white") # Configure the style for a Labelframe.
         self.bodystyle.configure("TLabelframe", background="#575757", foreground="white")
         self.bodystyle.configure("TCombobox", selectbackground="#575757", bordercolor="white")
-        self.bodystyle.configure("TCheckbutton", background="#575757", foreground="white")
 
         self.option_add("*TCombobox*Listbox.background", "#575757")
         self.option_add("*TCombobox*Listbox.foreground", "white")
@@ -178,19 +165,7 @@ class PyDashboard(ttk.Frame, Observer.Observer):
         self.step1 = choosers[0]
         self.step1.grid(row=1, column=1, sticky=(E, W)) # Add Step 1 Chooser to the PyDashboard.
         self.pane1and2.add(self.step1) # Add the Chooser to the PanedWindow.
-        self.step2 = choosers[1]
-        self.step2.grid(row=1, column=2, sticky=(E, W)) # Add Step 2 Chooser to the PyDashboard.
-        self.pane1and2.add(self.step2) # Add the Chooser to the PanedWindow.
 
-        # Create a Checkbutton to enable/disable the Autonomous Mode Chooser.
-        self.checkboxvar = IntVar()
-        self.checkbox = ttk.Checkbutton(self.step2, text="Enable Chooser", variable=self.checkboxvar, command=self.oncheck) # Create the Checkbutton
-        self.checkbox.grid(row=4, column=2)
-        self.oncheck()
-
-    # Called when the checkbox is checked/unchecked.
-    def oncheck(self):
-        subject.notify(Data.DataItem("Checkbox", self.checkboxvar.get()))
         
     # Called when something in the subject changes.
     # Parameter:
@@ -210,8 +185,8 @@ root = Tk()
 dashboard = PyDashboard(subject, root, title, networking)
 dashboard.master.title(title)
 choosers = [
-    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", ("Left", "Center", "Right"), {"Left" : "imgs/2018/Step 1/left.png", "Center" : "imgs/2018/Step 1/center.png", "Right" : "imgs/2018/Step 1/right.png"}, networking, "startingPosition", text="Starting Position"),
-    Chooser(subject, dashboard.pane1and2, 1, 2, "Choose an autonomous mode:", ("Autodetect", "Drive forward"), {"Autodetect" : "imgs/2018/Step 2/autodetect.png", "Drive forward" : "imgs/2018/Step 2/drive_forward.png"}, networking, "automode", text="Autonomous mode")
+    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", ("Left", "Center", "Right"), {"Left" : "imgs/2018/left.png", "Center" : "imgs/2018/center.png", "Right" : "imgs/2018/right.png"}, networking, "startingPosition", text="Starting Position")
+    
 ]
 dashboard.addChoosers(choosers)
 root.iconbitmap("Steampunk RT_icon.ico")
