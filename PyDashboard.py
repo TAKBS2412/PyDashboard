@@ -103,6 +103,9 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
             if enteredvaluefloat < 0:
                 enteredvaluefloat = 0
                 self.timetowaiterrorvar.set("Please enter a positive number!")
+            elif enteredvaluefloat >= 15:
+                enteredvaluefloat = 0
+                self.timetowaiterrorvar.set("Please enter a number less than 15!")
             else:
                 self.timetowaiterrorvar.set("")
             self.subject.notify(Data.DataItem("timetowait", enteredvaluefloat))
@@ -188,7 +191,7 @@ class PyDashboard(ttk.Frame, Observer.Observer):
         self.pane1and2.add(self.step1) # Add the Chooser to the PanedWindow.
         
         # Add time to wait field to Starting Position Chooser.
-        self.step1.timetowaitlabel = ttk.Label(self.step1, text="Time to wait (seconds):")
+        self.step1.timetowaitlabel = ttk.Label(self.step1, text="Time to wait before starting autonomous (seconds):")
         self.step1.timetowaitlabel.grid(row=4, column=1)
         
         self.step1.timetowait = ttk.Entry(self.step1)
