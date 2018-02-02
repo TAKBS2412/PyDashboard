@@ -29,7 +29,6 @@ class Networking(Observer.Observer):
     Assumes that the data is a string.
     '''
     def sendData(self, key, value):
-        print(value)
         self.table.putString(key, value)
     '''
     Returns whether the robot is connected or not.
