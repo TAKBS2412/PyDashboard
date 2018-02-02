@@ -87,6 +87,21 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
                 if str(self.dropdown["state"]) != "readonly":
                     self.dropdown["state"] = "readonly"
                     self.subject.notify(Data.DataItem(self.keyname, self.dropdownvar.get()))
+        elif changeditem.key == "timetowait":
+            enteredvalue = changeditem.value
+            enteredvaluefloat = 0
+            try:
+                if enteredvalue == "":
+                    enteredvaluefloat = 0
+                else:
+                    enteredvaluefloat = float(enteredvalue)
+            except ValueError:
+                self.timetowaiterrorvar.set("Please enter a valid number!")
+                return
+            if enteredvaluefloat < 0:
+                self.timetowaiterrorvar.set("Please enter a positive number!")
+            else:
+                self.timetowaiterrorvar.set("")                
 
 '''
 This class represents the GUI for PyDashboard.
@@ -174,6 +189,10 @@ class PyDashboard(ttk.Frame, Observer.Observer):
         
         self.step1.timetowait = ttk.Entry(self.step1)
         self.step1.timetowait.grid(row=5, column=1)
+
+        self.step1.timetowaiterrorvar = StringVar()
+        self.step1.timetowaiterror = ttk.Label(self.step1, textvariable=self.step1.timetowaiterrorvar, foreground="red")
+        self.step1.timetowaiterror.grid(row=6, column=1)
         
     # Called when something in the subject changes.
     # Parameter:
