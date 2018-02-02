@@ -67,6 +67,8 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
     def sendData(self, event):
         self.dropdown.selection_clear()
         self.subject.notify(Data.DataItem(self.keyname, self.dropdownvar.get()))
+        if self.keyname == "startingPosition":
+            self.subject.notify(Data.DataItem("timetowait", self.timetowait.get()))
 
     # Called when something in the subject changes.
     # Parameter:
@@ -165,7 +167,13 @@ class PyDashboard(ttk.Frame, Observer.Observer):
         self.step1 = choosers[0]
         self.step1.grid(row=1, column=1, sticky=(E, W)) # Add Step 1 Chooser to the PyDashboard.
         self.pane1and2.add(self.step1) # Add the Chooser to the PanedWindow.
-
+        
+        # Add time to wait field to Starting Position Chooser.
+        self.step1.timetowaitlabel = ttk.Label(self.step1, text="Time to wait (seconds):")
+        self.step1.timetowaitlabel.grid(row=4, column=1)
+        
+        self.step1.timetowait = ttk.Entry(self.step1)
+        self.step1.timetowait.grid(row=5, column=1)
         
     # Called when something in the subject changes.
     # Parameter:
