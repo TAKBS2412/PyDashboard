@@ -16,14 +16,14 @@ class Networking(Observer.Observer):
     def __init__(self, subject, ip="roborio-2412-frc.local", tablename="PyDashboard"):
         self.subject = subject
         self.subject.attach(self)
-        
+
         # Setup NetworkTables
         NetworkTables.initialize(server=ip)
         self.table = NetworkTables.getTable(tablename)
         NetworkTables.addConnectionListener(self.listener, False)
 
         self.subject.addDataItem(Data.DataItem("connectionstatus", self.isConnected()))
-        
+
     '''
     Sends data over to the user using NetworkTables.
     Assumes that the data is a string.
@@ -34,7 +34,7 @@ class Networking(Observer.Observer):
     Returns whether the robot is connected or not.
     '''
     def isConnected(self):
-        return self.table.isConnected()
+        return NetworkTables.isConnected()
 
     '''
     Called when the connection status changes.
