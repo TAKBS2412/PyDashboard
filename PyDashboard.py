@@ -41,7 +41,7 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
 
         self.subject.attach(self)
         self.subject.addDataItem(Data.DataItem(keyname, ""))
-        
+
         self.createWidgets() # Create the widgets that will be displayed to the user.
     def createWidgets(self):
         # Create a Label with the text specified (self.headertext).
@@ -130,7 +130,7 @@ class PyDashboard(ttk.Frame, Observer.Observer):
         ttk.Frame.__init__(self, master, **kw) # Call the superclass's constructor.
 
         self.grid() # Use the grid layout manager.
-    
+
         # Set the values that were passed in as parameters.
         self.subject = subject
         self.headerlabeltext = headerlabeltext
@@ -160,15 +160,15 @@ class PyDashboard(ttk.Frame, Observer.Observer):
         self.option_add("*TCombobox*Listbox.foreground", "white")
         self.option_add("*TCombobox*Listbox.selectForeground", "#575757")
         self.option_add("*TCombobox*Listbox.selectBackground", "white")
-        
+
         self.bodystyle.theme_use("vista")
-        
+
         self.createWidgets() # Create the widgets that will be displayed to the user.
     def createWidgets(self):
         # Create the header Label
         self.header = ttk.Label(self, text=self.headerlabeltext) # Create the Label.
         self.header.grid(row=0, column=1) # Add the Label to the PyDashboard.
-        
+
         # Create the Robot Status LabelFrame.
         self.robotstatus = ttk.LabelFrame(self, text="Robot Status") # Create the LabelFrame itself.
         self.robotstatus.label = ttk.Label(self.robotstatus, text="Robot Disconnected") # Create the Label that will be displayed within the LabelFrame.
@@ -189,18 +189,18 @@ class PyDashboard(ttk.Frame, Observer.Observer):
         self.step1 = choosers[0]
         self.step1.grid(row=1, column=1, sticky=(E, W)) # Add Step 1 Chooser to the PyDashboard.
         self.pane1and2.add(self.step1) # Add the Chooser to the PanedWindow.
-        
+
         # Add time to wait field to Starting Position Chooser.
         self.step1.timetowaitlabel = ttk.Label(self.step1, text="Time to wait before starting autonomous (seconds):")
         self.step1.timetowaitlabel.grid(row=4, column=1)
-        
+
         self.step1.timetowait = ttk.Entry(self.step1)
         self.step1.timetowait.grid(row=5, column=1)
 
         self.step1.timetowaiterrorvar = StringVar()
         self.step1.timetowaiterror = ttk.Label(self.step1, textvariable=self.step1.timetowaiterrorvar, foreground="red")
         self.step1.timetowaiterror.grid(row=6, column=1)
-        
+
     # Called when something in the subject changes.
     # Parameter:
     #     changeditem - The DataItem that was changed.
@@ -214,13 +214,31 @@ class PyDashboard(ttk.Frame, Observer.Observer):
 subject = Data.Data()
 networking = Networking.Networking(subject, "10.24.12.2") # Try to connect to 10.24.12.51.
 
+exampleJSON = """
+{
+	"title": "PyDashboard",
+	"icon": "Steampunk RT_icon.ico",
+	"choosers": [
+		{
+			"keyname": "startingPosition",
+			"title": "Starting Position",
+			"options": [
+				"Left" : "imgs/2018/Step 1/left.png",
+				"Middle" : "imgs/2018/Step 1/middle.png",
+				"Right - Center" : "imgs/2018/Step 1/right - center.png",
+				"Right" : "imgs/2018/Step 1/right.png",
+				"Default" : "imgs/2018/Step 1/default.png"
+		}
+	]
+}
+"""
 title = "PyDashboard"
 root = Tk()
 dashboard = PyDashboard(subject, root, title, networking)
 dashboard.master.title(title)
 choosers = [
     Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", ("Left", "Middle", "Right - Center", "Right", "Default"), {"Left" : "imgs/2018/Step 1/left.png", "Middle" : "imgs/2018/Step 1/middle.png", "Right - Center" : "imgs/2018/Step 1/right - center.png", "Right" : "imgs/2018/Step 1/right.png", "Default" : "imgs/2018/Step 1/default.png"}, networking, "startingPosition", text="Starting Position")
-    
+
 ]
 dashboard.addChoosers(choosers)
 root.iconbitmap("Steampunk RT_icon.ico")

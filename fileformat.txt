@@ -1,0 +1,8 @@
+title
+icon
+
+choosers:
+	key
+	title
+	options:
+		option name : img src
