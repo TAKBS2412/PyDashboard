@@ -23,12 +23,11 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
         row - The row in the grid that this Chooser will occupy.
         column - The column in the grid that this Chooser will occupy.
         headertext - The text that the header Label will display.
-        comboboxvalues - A tuple of values that the Combobox will display.
         imgdict - A dictionary. Each key is an option that can be selected by the master Chooser. Each value is the path to the image (as a string) that will be displayed.
         networking - A Networking instance (see Networking module).
         keyname - The name of the key that this Chooser is associated with. The key will be sent (along with the currently selected mode) using networking.
     '''
-    def __init__(self, subject, master=None, row=0, column=0, headertext="", comboboxvalues=(), imgdict={}, networking=None, keyname="", **kw):
+    def __init__(self, subject, master=None, row=0, column=0, headertext="", imgdict={}, networking=None, keyname="", **kw):
         ttk.LabelFrame.__init__(self, master, **kw) # Call the superclass's constructor.
 
         # Set the values that were passed in as parameters.
@@ -36,7 +35,7 @@ class Chooser(ttk.LabelFrame, Observer.Observer):
         self.row = row
         self.column = column
         self.headertext = headertext
-        self.comboboxvalues = comboboxvalues
+        self.comboboxvalues = tuple(imgdict.keys())
         self.imgdict = imgdict
         self.networking = networking
         self.keyname = keyname
@@ -247,7 +246,7 @@ root = Tk()
 dashboard = PyDashboard(subject, root, title, networking)
 dashboard.master.title(title)
 choosers = [
-    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", ("Left", "Middle", "Right - Center", "Right", "Default"), optionsData, networking, "startingPosition", text="Starting Position")
+    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", optionsData, networking, "startingPosition", text="Starting Position")
 
 ]
 dashboard.addChoosers(choosers)
