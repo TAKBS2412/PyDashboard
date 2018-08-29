@@ -223,6 +223,7 @@ exampleJSON = """
 		{
 			"keyname": "startingPosition",
 			"title": "Starting Position",
+            "headertext": "Choose a starting position:",
 			"options": [
                 {
     				"Left" : "imgs/2018/Step 1/left.png",
@@ -246,7 +247,7 @@ root = Tk()
 dashboard = PyDashboard(subject, root, title, networking)
 dashboard.master.title(title)
 choosers = [
-    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", optionsData, networking, choosersData["keyname"], text=choosersData["title"])
+    Chooser(subject, dashboard.pane1and2, 1, 1, choosersData["headertext"], optionsData, networking, choosersData["keyname"], text=choosersData["title"])
 
 ]
 dashboard.addChoosers(choosers)

@@ -4,5 +4,6 @@ icon
 choosers:
 	key
 	title
+	headertext
 	options:
 		option name : img src
