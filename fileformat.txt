@@ -1,5 +1,6 @@
 title
 icon
+roborio-ip
 
 choosers:
 	key

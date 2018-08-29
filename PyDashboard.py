@@ -212,13 +212,12 @@ class PyDashboard(ttk.Frame, Observer.Observer):
                 self.robotstatus.label["text"] = "Robot Connected"
             else:
                 self.robotstatus.label["text"] = "Robot Disconnected"
-subject = Data.Data()
-networking = Networking.Networking(subject, "10.24.12.2") # Try to connect to 10.24.12.51.
 
 exampleJSON = """
 {
 	"title": "PyDashboard",
 	"icon": "Steampunk RT_icon.ico",
+    "roborio-ip": "10.24.12.2",
 	"choosers": [
 		{
 			"keyname": "startingPosition",
@@ -241,6 +240,9 @@ exampleJSON = """
 saveData = json.loads(exampleJSON)
 choosersData = saveData["choosers"][0]
 optionsData = choosersData["options"][0]
+
+subject = Data.Data()
+networking = Networking.Networking(subject, saveData["roborio-ip"]) # Try to connect to the roborio.
 
 title = saveData["title"]
 root = Tk()
