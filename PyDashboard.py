@@ -246,7 +246,7 @@ root = Tk()
 dashboard = PyDashboard(subject, root, title, networking)
 dashboard.master.title(title)
 choosers = [
-    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", optionsData, networking, "startingPosition", text=choosersData["title"])
+    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", optionsData, networking, choosersData["keyname"], text=choosersData["title"])
 
 ]
 dashboard.addChoosers(choosers)
