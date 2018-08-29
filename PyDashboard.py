@@ -237,7 +237,10 @@ exampleJSON = """
 	]
 }
 """
-title = "PyDashboard"
+
+saveData = json.loads(exampleJSON)
+
+title = saveData["title"]
 root = Tk()
 dashboard = PyDashboard(subject, root, title, networking)
 dashboard.master.title(title)
