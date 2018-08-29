@@ -213,45 +213,24 @@ class PyDashboard(ttk.Frame, Observer.Observer):
             else:
                 self.robotstatus.label["text"] = "Robot Disconnected"
 
-exampleJSON = """
-{
-	"title": "PyDashboard",
-	"icon": "Steampunk RT_icon.ico",
-    "roborio-ip": "10.24.12.2",
-	"choosers": [
-		{
-			"keyname": "startingPosition",
-			"title": "Starting Position",
-            "headertext": "Choose a starting position:",
-			"options": [
-                {
-    				"Left" : "imgs/2018/Step 1/left.png",
-    				"Middle" : "imgs/2018/Step 1/middle.png",
-    				"Right - Center" : "imgs/2018/Step 1/right - center.png",
-    				"Right" : "imgs/2018/Step 1/right.png",
-    				"Default" : "imgs/2018/Step 1/default.png"
-                }
-            ]
-		}
-	]
-}
-"""
+with open("test.json", "r") as f:
+    jsonData = f.read()
+    saveData = json.loads(jsonData)
 
-saveData = json.loads(exampleJSON)
-choosersData = saveData["choosers"][0]
-optionsData = choosersData["options"][0]
+    choosersData = saveData["choosers"][0]
+    optionsData = choosersData["options"][0]
 
-subject = Data.Data()
-networking = Networking.Networking(subject, saveData["roborio-ip"]) # Try to connect to the roborio.
+    subject = Data.Data()
+    networking = Networking.Networking(subject, saveData["roborio-ip"]) # Try to connect to the roborio.
 
-title = saveData["title"]
-root = Tk()
-dashboard = PyDashboard(subject, root, title, networking)
-dashboard.master.title(title)
-choosers = [
-    Chooser(subject, dashboard.pane1and2, 1, 1, choosersData["headertext"], optionsData, networking, choosersData["keyname"], text=choosersData["title"])
+    title = saveData["title"]
+    root = Tk()
+    dashboard = PyDashboard(subject, root, title, networking)
+    dashboard.master.title(title)
+    choosers = [
+        Chooser(subject, dashboard.pane1and2, 1, 1, choosersData["headertext"], optionsData, networking, choosersData["keyname"], text=choosersData["title"])
 
-]
-dashboard.addChoosers(choosers)
-root.iconbitmap(saveData["icon"])
-dashboard.mainloop()
+    ]
+    dashboard.addChoosers(choosers)
+    root.iconbitmap(saveData["icon"])
+    dashboard.mainloop()
