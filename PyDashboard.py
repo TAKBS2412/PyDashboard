@@ -239,15 +239,17 @@ exampleJSON = """
 """
 
 saveData = json.loads(exampleJSON)
+choosersData = saveData["choosers"][0]
+optionsData = choosersData["options"][0]
 
 title = saveData["title"]
 root = Tk()
 dashboard = PyDashboard(subject, root, title, networking)
 dashboard.master.title(title)
 choosers = [
-    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", ("Left", "Middle", "Right - Center", "Right", "Default"), {"Left" : "imgs/2018/Step 1/left.png", "Middle" : "imgs/2018/Step 1/middle.png", "Right - Center" : "imgs/2018/Step 1/right - center.png", "Right" : "imgs/2018/Step 1/right.png", "Default" : "imgs/2018/Step 1/default.png"}, networking, "startingPosition", text="Starting Position")
+    Chooser(subject, dashboard.pane1and2, 1, 1, "Choose a starting position:", ("Left", "Middle", "Right - Center", "Right", "Default"), optionsData, networking, "startingPosition", text="Starting Position")
 
 ]
 dashboard.addChoosers(choosers)
-root.iconbitmap("Steampunk RT_icon.ico")
+root.iconbitmap(saveData["icon"])
 dashboard.mainloop()
