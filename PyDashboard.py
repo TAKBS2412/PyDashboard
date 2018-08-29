@@ -6,6 +6,8 @@ from tkinter import font
 from tkinter import ttk
 from PIL import ImageTk, Image
 
+import json
+
 '''
 This class is a subclass of ttk.LabelFrame and Observer.
 It contains 3 widgets: A header (a Label), a Combobox, and an image.
@@ -223,11 +225,14 @@ exampleJSON = """
 			"keyname": "startingPosition",
 			"title": "Starting Position",
 			"options": [
-				"Left" : "imgs/2018/Step 1/left.png",
-				"Middle" : "imgs/2018/Step 1/middle.png",
-				"Right - Center" : "imgs/2018/Step 1/right - center.png",
-				"Right" : "imgs/2018/Step 1/right.png",
-				"Default" : "imgs/2018/Step 1/default.png"
+                {
+    				"Left" : "imgs/2018/Step 1/left.png",
+    				"Middle" : "imgs/2018/Step 1/middle.png",
+    				"Right - Center" : "imgs/2018/Step 1/right - center.png",
+    				"Right" : "imgs/2018/Step 1/right.png",
+    				"Default" : "imgs/2018/Step 1/default.png"
+                }
+            ]
 		}
 	]
 }
